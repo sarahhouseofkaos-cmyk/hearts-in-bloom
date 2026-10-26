@@ -125,12 +125,3 @@ jobs:
               if (rows.length !== 1 || rows[0].status !== "new") process.exit(1);
             })().catch((e) => { console.error(e.message); process.exit(1); });
           '
-      - name: Print generated snapshot and journal (temporary)
-        run: |
-          mv db/migrations /tmp/mig-backup
-          DATABASE_URL="mysql://u:p@127.0.0.1:3306/x" npx drizzle-kit generate
-          for f in db/migrations/meta/_journal.json db/migrations/meta/0000_snapshot.json; do
-            echo "=== FILE: $f"
-            node -e 'process.stdout.write(JSON.stringify(JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"))))' "$f"
-            echo
-          done
