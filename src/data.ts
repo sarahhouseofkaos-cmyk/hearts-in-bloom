@@ -1,0 +1,144 @@
+export type CollectionItem = {
+  slug: string
+  name: string
+  description: string
+  image: string
+  category: 'romantic' | 'dark'
+  source: 'Hearts in Bloom' | 'Styling inspiration'
+}
+
+export const collection: CollectionItem[] = [
+  {
+    slug: 'classic-ivory',
+    name: 'Classic Ivory',
+    description: 'Soft ivory roses and white hydrangeas for a pure, timeless ceremony backdrop.',
+    image: '/images/classic-ivory.webp',
+    category: 'romantic',
+    source: 'Hearts in Bloom',
+  },
+  {
+    slug: 'soft-blush-garden',
+    name: 'Soft Blush Garden',
+    description: 'Delicate blush and ivory roses with soft greenery for a gentle, romantic feel.',
+    image: '/images/soft-blush-garden.webp',
+    category: 'romantic',
+    source: 'Hearts in Bloom',
+  },
+  {
+    slug: 'lush-ivory-greenery',
+    name: 'Lush Ivory & Greenery',
+    description: 'Abundant cascading greenery with soft ivory blooms for a natural, full look.',
+    image: '/images/lush-ivory-greenery.webp',
+    category: 'romantic',
+    source: 'Hearts in Bloom',
+  },
+  {
+    slug: 'full-blush',
+    name: 'Full Blush',
+    description: 'Layers of blush pink roses and hydrangeas for an unapologetically romantic statement.',
+    image: '/images/full-blush.webp',
+    category: 'romantic',
+    source: 'Styling inspiration',
+  },
+  {
+    slug: 'asymmetrical-cascade',
+    name: 'Asymmetrical Cascade',
+    description: 'Flowing, asymmetric styling with flowers cascading down one side for a modern feel.',
+    image: '/images/asymmetrical-cascade.webp',
+    category: 'romantic',
+    source: 'Styling inspiration',
+  },
+  {
+    slug: 'coastal-pampas',
+    name: 'Coastal Pampas',
+    description: 'Soft beige pampas and ivory tones for a relaxed, natural celebration by the coast.',
+    image: '/images/coastal-pampas.webp',
+    category: 'romantic',
+    source: 'Styling inspiration',
+  },
+  {
+    slug: 'dusty-blue-heart',
+    name: 'Dusty Blue Heart',
+    description: 'Soft dusty blue roses and muted foliage for a cool, atmospheric look.',
+    image: '/images/dusty-blue-heart.webp',
+    category: 'dark',
+    source: 'Hearts in Bloom',
+  },
+  {
+    slug: 'teal-noir',
+    name: 'Teal Noir',
+    description: 'Rich teal roses with deep green foliage for a jewel-toned, dramatic statement.',
+    image: '/images/teal-noir.webp',
+    category: 'dark',
+    source: 'Hearts in Bloom',
+  },
+  {
+    slug: 'midnight-plum',
+    name: 'Midnight Plum',
+    description: 'Deep plum, mauve and dark foliage for a classically romantic, moody palette.',
+    image: '/images/midnight-plum.webp',
+    category: 'dark',
+    source: 'Hearts in Bloom',
+  },
+  {
+    slug: 'midnight-blue',
+    name: 'Midnight Blue',
+    description: 'Deep navy roses and cascading foliage for a rich, atmospheric celebration.',
+    image: '/images/midnight-blue.webp',
+    category: 'dark',
+    source: 'Hearts in Bloom',
+  },
+  {
+    slug: 'gothic-throne',
+    name: 'Gothic Throne',
+    description: 'Ornate black throne seating with carved detail for a dramatic, regal setting.',
+    image: '/images/gothic-throne-detail.webp',
+    category: 'dark',
+    source: 'Hearts in Bloom',
+  },
+  {
+    slug: 'candlelit-gothic',
+    name: 'Candlelit Gothic',
+    description: 'Gothic throne chairs, soft candlelight and dark florals for an intimate statement.',
+    image: '/images/gothic-fireplace.webp',
+    category: 'dark',
+    source: 'Hearts in Bloom',
+  },
+]
+
+export const packages = [
+  { name: 'The Classic', price: 'From £400', description: 'Pre-dressed heart arch with local delivery and set-up.', detail: 'A beautiful focal point, simply done.' },
+  { name: 'The Ceremony', price: 'From £550', description: 'Pre-dressed heart arch with a pair of throne chairs.', detail: 'For vows, portraits and your sweetheart table.' },
+  { name: 'The Statement', price: 'From £650', description: 'Higher-end styled heart arch with a pair of throne chairs.', detail: 'A fuller, more bespoke floral arrangement.' },
+  { name: 'The Full Look', price: 'From £750', description: 'Higher-end styled arch, throne chairs and coordinating styling.', detail: 'A cohesive setting with the finishing details included.' },
+]
+
+export const individualPrices = [
+  { group: 'Signature Heart Arch', name: 'Basic arch frame (undressed)', price: '£150' },
+  { group: 'Signature Heart Arch', name: 'Pre-dressed floral (silk style)', price: '£250' },
+  { group: 'Signature Heart Arch', name: 'Higher-end styled + set-up', price: '£350–£550+' },
+  { group: 'Signature Heart Arch', name: 'Bespoke fresh-flower arch', price: '£750–£2,000+' },
+  { group: 'Throne Chairs & Styling', name: 'Throne chair (single)', price: '£150' },
+  { group: 'Throne Chairs & Styling', name: 'Pair of throne chairs', price: '£300' },
+  { group: 'Throne Chairs & Styling', name: 'Coordinating styling', price: 'From £75' },
+]
+
+export const faqs = [
+  { question: 'Is delivery included?', answer: 'Delivery, set-up and collection are included within approximately 40 miles of Newcastle upon Tyne. Further travel is quoted separately.' },
+  { question: 'Can you match our wedding colours?', answer: 'Yes. Every look can be tailored to your palette, venue and vision. Share your ideas or inspiration when you enquire and Sarah will recommend a suitable styling direction.' },
+  { question: 'How do we secure our date?', answer: 'After your personal quotation, a 30% deposit secures your booking. The remaining balance is due no later than 14 days before your event.' },
+  { question: 'Do you offer fresh flowers?', answer: 'Yes. Bespoke fresh-flower arches are available alongside the signature silk styling. Fresh-flower designs are quoted individually according to your chosen flowers, coverage and season.' },
+  { question: 'Can we hire the arch without flowers?', answer: 'Yes. The undressed heart arch frame is available on its own, or you can choose pre-dressed, higher-end or fresh-flower styling.' },
+  { question: 'What access does the venue need to provide?', answer: 'Your venue must allow our team access for the agreed setup and collection. Please share parking, stairs, lift, level-access and ground-condition details in advance so we can plan safely.' },
+  { question: 'Can the arch be used outdoors?', answer: 'Yes, but it is not designed for extreme weather. Consider high winds, heavy rain and ground conditions, and arrange an indoor alternative with your venue. You are responsible for deciding whether conditions are suitable on the day.' },
+  { question: 'When is the final balance due?', answer: 'The remaining balance is due no later than 14 days before your event. Your booking is confirmed once the 30% deposit and written acceptance of the Terms have been received.' },
+  { question: 'What if we need to cancel?', answer: 'More than 60 days before, the deposit is non-refundable and any balance paid is refunded. At 30–60 days, 50% of the total hire fee is payable. Less than 30 days before, the full fee is payable. See the Terms for full details.' },
+]
+
+export const socialLinks = {
+  instagram: 'https://www.instagram.com/heartsinbloom.uk/',
+  pinterest: 'https://uk.pinterest.com/sarahheartsinbloom/',
+  facebook: 'https://www.facebook.com/HeartsInBloomUK',
+}
+
+export const email = 'hello@heartsinbloom.co.uk'

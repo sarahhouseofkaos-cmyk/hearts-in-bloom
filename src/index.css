@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Marcellus&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Primitive palette */
+  --paper-100: oklch(98.1% 0.009 72);
+  --paper-200: oklch(95.4% 0.018 66);
+  --paper-300: oklch(90.8% 0.026 62);
+  --ink-900: oklch(29.4% 0.014 51);
+  --ink-700: oklch(43.8% 0.018 52);
+  --ink-500: oklch(53% 0.019 52);
+  --clay-500: oklch(56.7% 0.111 43);
+  --clay-700: oklch(42.5% 0.09 39);
+  --night-900: oklch(24.5% 0.014 52);
+  --night-800: oklch(29% 0.017 52);
+  --light-100: oklch(97% 0.012 72);
+
+  /* Semantic palette */
+  --background: var(--paper-100);
+  --foreground: var(--ink-900);
+  --surface-muted: var(--paper-200);
+  --surface-dark: var(--night-900);
+  --text-muted: var(--ink-700);
+  --accent: var(--clay-500);
+  --accent-action: var(--clay-700);
+  --border: var(--paper-300);
+  --ring: var(--clay-500);
+
+  /* Type and layout */
+  --font-display: 'Marcellus', 'Iowan Old Style', 'Times New Roman', serif;
+  --font-body: 'Jost', 'Avenir Next', 'Trebuchet MS', sans-serif;
+  --container: 82rem;
+  --gutter: clamp(1.25rem, 4vw, 4.5rem);
+  --section-space: clamp(5rem, 10vw, 9rem);
+  --radius: 0;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-body);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+body { margin: 0; min-width: 320px; min-height: 100dvh; background: var(--background); color: var(--foreground); font-size: 16px; line-height: 1.65; }
+body, button, input, select, textarea { font-family: var(--font-body); }
+button, input, select, textarea { font-size: 16px; }
+button, a { -webkit-tap-highlight-color: transparent; }
+a { color: inherit; text-decoration: none; }
+button { color: inherit; }
+img { display: block; max-width: 100%; }
+figure, h1, h2, h3, p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+::selection { background: var(--paper-300); color: var(--ink-900); }
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
+#root { min-height: 100dvh; }
+main { min-height: 60dvh; }
