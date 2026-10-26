@@ -29,6 +29,16 @@ describe("parseDatabaseUrl", () => {
     const o = parseDatabaseUrl("mysql://u:p@db/x?ssl-mode=REQUIRED", "-----BEGIN CERTIFICATE-----\nabc\n-----END CERTIFICATE-----");
     expect(o.ssl).toMatchObject({ rejectUnauthorized: true });
     expect((o.ssl as { ca?: string }).ca).toContain("BEGIN CERTIFICATE");
+    // Managed hosts connect by internal names, so only the CA is checked.
+    expect(typeof (o.ssl as { checkServerIdentity?: unknown }).checkServerIdentity).toBe("function");
+  });
+
+  it("checks the host name only for VERIFY_IDENTITY", () => {
+    const ca = "-----BEGIN CERTIFICATE-----\nabc\n-----END CERTIFICATE-----";
+    const verifyCa = parseDatabaseUrl("mysql://u:p@db/x?ssl-mode=VERIFY_CA", ca).ssl as Record<string, unknown>;
+    const verifyId = parseDatabaseUrl("mysql://u:p@db/x?ssl-mode=VERIFY_IDENTITY", ca).ssl as Record<string, unknown>;
+    expect(typeof verifyCa.checkServerIdentity).toBe("function");
+    expect(verifyId.checkServerIdentity).toBeUndefined();
   });
 
   it("requires a CA certificate for VERIFY_CA and VERIFY_IDENTITY", () => {

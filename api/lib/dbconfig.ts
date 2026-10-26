@@ -1,4 +1,14 @@
-import type { PoolOptions } from "mysql2";
+import type { PoolOptions, SslOptions } from "mysql2";
+
+// mysql2 hands these options straight to Node's TLS layer, which understands
+// checkServerIdentity even though mysql2's own type does not declare it.
+type TlsOptions = SslOptions & { checkServerIdentity?: () => undefined };
+
+function verifyAgainstCa(ca: string, checkHostName: boolean): TlsOptions {
+  const options: TlsOptions = { ca, rejectUnauthorized: true };
+  if (!checkHostName) options.checkServerIdentity = () => undefined;
+  return options;
+}
 
 /**
  * Turns a mysql:// connection URL into mysql2 pool options.
@@ -50,20 +60,14 @@ export function parseDatabaseUrl(rawUrl: string, caCert?: string): PoolOptions {
     case "REQUIRED":
     case "REQUIRE":
     case "PREFERRED":
-      options.ssl = ca
-        ? { ca, rejectUnauthorized: true, checkServerIdentity: () => undefined }
-        : { rejectUnauthorized: false };
+      options.ssl = ca ? verifyAgainstCa(ca, false) : { rejectUnauthorized: false };
       break;
     case "VERIFY_CA":
     case "VERIFY_IDENTITY":
       if (!ca) {
         throw new Error(`DATABASE_URL asks for ssl-mode=${mode}, so DATABASE_CA_CERT must be set`);
       }
-      options.ssl = {
-        ca,
-        rejectUnauthorized: true,
-        ...(mode === "VERIFY_CA" ? { checkServerIdentity: () => undefined } : {}),
-      };
+      options.ssl = verifyAgainstCa(ca, mode === "VERIFY_IDENTITY");
       break;
     default:
       throw new Error(`Unsupported ssl-mode in DATABASE_URL: ${mode}`);
