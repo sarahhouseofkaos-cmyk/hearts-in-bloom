@@ -1,6 +1,6 @@
 # Hearts in Bloom
 
-A complete, responsive redesign of [heartsinbloom.co.uk](https://heartsinbloom.co.uk), built with React, TypeScript, Vite, Hono, tRPC, Drizzle ORM and MySQL.
+A responsive static website for [heartsinbloom.co.uk](https://heartsinbloom.co.uk), built with React, TypeScript, Vite and Tailwind CSS. It is hosted free on **GitHub Pages**, and enquiries are received by **MailerLite**. There is no server, database or API token anywhere in this project.
 
 ## Site structure
 
@@ -11,132 +11,110 @@ A complete, responsive redesign of [heartsinbloom.co.uk](https://heartsinbloom.c
 - Practical booking guide
 - About and philosophy
 - Inspiration guides
-- Direct website enquiry form
+- Enquiry form
 - Terms, privacy and cookies
 - Branded 404 page
 
-## Working enquiries
+## Develop locally
 
-The enquiry form validates submissions in the browser and on the server, includes a honeypot and per-connection rate limiting, and stores enquiries privately in MySQL. Each successful submission returns a reference in the format `HIB-XXXXXXXX`.
-
-Enquiries are recorded with a `new` status for follow-up. When configured, the server also creates or updates the enquirer in MailerLite and adds the enquiry reference and event details to custom fields. The database save happens first, so a MailerLite outage does not discard the enquiry; the failure is logged using only its reference and a safe error message.
-
-MailerLite is used for enquiry management, not as evidence of marketing consent. The form does not add a separate marketing opt-in or promise newsletter subscription. MailerLite subscriber syncing also does **not** send transactional notification emails; use a separate MailerLite automation only where appropriate, or a transactional-email provider, if you want email alerts. Visitors can still use the published email address as a fallback.
-
-The relevant files are:
-
-- Form UI: `src/pages/Enquire.tsx`
-- Server validation and rate limiting: `api/enquiryRouter.ts`
-- Database operation: `api/queries/enquiries.ts`
-- MailerLite server integration: `api/services/mailerlite.ts`
-- Database table: `db/schema.ts`
-
-### MailerLite account setup
-
-Keep the API token on the server. Never rename it with a `VITE_` prefix, put it in frontend code, or commit a real token.
-
-1. In MailerLite, open **Integrations → MailerLite API → Use**, then choose **Generate new token**. Name it clearly, for example `Hearts in Bloom website`.
-2. Create a dedicated group named **Website enquiries**. Find its ID under **Integrations → MailerLite API → Groups**.
-3. In **Subscribers → Fields**, create these custom fields with the exact keys shown. MailerLite normally derives the key from the field name; check the API field list if your account uses a different key.
-
-| Field name | API key | Type |
-| --- | --- | --- |
-| Event date | `event_date` | Date |
-| Venue | `venue` | Text |
-| Service | `service` | Text |
-| Package | `package` | Text |
-| Floral style | `floral_style` | Text |
-| Floral coverage | `floral_coverage` | Text |
-| Enquiry message | `enquiry_message` | Text |
-| Enquiry reference | `enquiry_reference` | Text |
-
-The standard `name` and `phone` fields are used automatically. Add these values to the local or production server environment (not the repository):
+Use Node.js 20 or newer.
 
 ```bash
-MAILERLITE_API_TOKEN=your_private_server_token
-MAILERLITE_GROUP_ID=your_website_enquiries_group_id
+npm ci
+npm run dev        # http://localhost:3000
 ```
 
-The group ID is optional, but recommended to keep website enquiries separate. Without a token, enquiries continue to be stored privately in MySQL and MailerLite syncing is skipped. With an invalid token, unknown custom field or unavailable API, the enquiry remains in MySQL and the sync failure is logged. Resolve the configuration issue and follow up from the database record; the current integration does not automatically retry old submissions.
-
-## Run locally
-
-Use Node.js 20 or newer and a MySQL-compatible database.
-
-1. Install dependencies: `npm ci`
-2. Provide `DATABASE_URL` in `.env`. Add `MAILERLITE_API_TOKEN` and `MAILERLITE_GROUP_ID` after completing the MailerLite setup below. Never commit credentials.
-3. Create the database table: `npm run build && node dist/migrate.js` (applies the committed SQL migrations in `db/migrations`; safe to re-run). `npm run db:push` also works for local experiments.
-4. Start the site: `npm run dev`
-
-Open `http://localhost:3000`. The development server includes the frontend and API.
-
-## Quality checks and production build
+## Checks and production build
 
 ```bash
-npm test
-npm run check
-npm run lint
-npm run build
+npm test             # unit tests for the enquiry logic
+npm run check        # TypeScript
+npm run lint         # ESLint
+npm run build        # static site in dist/
+npm run verify:build # checks dist/: pages, assets, base path, no secrets or backend calls
 ```
 
-The frontend is generated in `dist/public/`; the bundled server entry is `dist/boot.js`. Run the production server with `npm start`.
+`VITE_BASE` controls the path the site is served from (default `/`). The GitHub Actions workflow sets it for deployment; see "Hosting on GitHub Pages" below.
 
-## Put it on GitHub
+The build creates a real page for every route (for example `dist/collection/index.html`) plus `dist/404.html`, because GitHub Pages serves static files only. This means direct links and refreshes work and return a normal HTTP 200.
 
-1. Create a new repository in your own GitHub account. A suitable name is `hearts-in-bloom`.
-2. From this project directory, run:
+## How enquiries work
 
-```bash
-git add .
-git commit -m "Redesign Hearts in Bloom website"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/hearts-in-bloom.git
-git push -u origin main
-```
+The enquiry page posts the visitor's details straight from their browser to the public endpoint of a MailerLite embedded form. MailerLite stores each enquiry as a subscriber in the **Website enquiries** group, with the enquiry details in custom fields.
 
-Replace `YOUR-USERNAME` with your GitHub username. If the repository already has a remote, inspect it with `git remote -v` before changing it.
+- No API token is used or needed. The only values the site needs are the MailerLite **account ID** and **form ID**, which are public and live in `src/enquiryConfig.ts`.
+- Enquiry consent and marketing consent are separate. The required checkbox covers using the details to answer the enquiry. It is recorded in the `enquiry_consent` field, and there is no marketing opt-in. Submitting an enquiry does not subscribe anyone to a newsletter. Never send campaigns to the Website enquiries group unless the person has separately asked to hear from you.
+- The browser checks the form (name, email, a future date, venue, service, message length) and a hidden honeypot field catches simple bots. MailerLite applies its own spam protection too.
+- The reference shown after sending (`HIB-XXXXXXXX`) is created in the browser and saved in the `enquiry_reference` field.
+- If MailerLite cannot be reached, the visitor sees an error with the published email address as a fallback. While the form IDs are not set, the page shows a notice instead of a working form.
 
-No password, database credential or access token is stored in this project. Authenticate Git using your own GitHub credentials or GitHub CLI.
+Relevant files:
 
-## Deployment and custom domain
+- `src/pages/Enquire.tsx`: form page
+- `src/lib/enquiry.ts`: validation, payload and submission (tested in `src/lib/enquiry.test.ts`)
+- `src/enquiryConfig.ts`: MailerLite account and form IDs
 
-GitHub remains the source-code repository, but **GitHub Pages is no longer sufficient**: it serves static files only and cannot run the enquiry API or database connection.
+### MailerLite setup
 
-Deploy the project to a Node.js host that supports the included `Dockerfile` or runs `npm start`. The reference setup is DigitalOcean App Platform (built from the Dockerfile) with a DigitalOcean Managed MySQL database in the same region.
+1. **Group.** In *Subscribers → Groups*, create a group named **Website enquiries**.
+2. **Custom fields.** In *Subscribers → Fields*, create these fields as **Text** fields. Use the exact names so MailerLite generates the keys shown (check the key in the fields list; the form code must use the same keys).
 
-Runtime variables for the web service (set them in the host's secure variables, never in Git):
+   | Field name | Key |
+   | --- | --- |
+   | Event date | `event_date` |
+   | Venue | `venue` |
+   | Service | `service` |
+   | Package | `package` |
+   | Floral style | `floral_style` |
+   | Floral coverage | `floral_coverage` |
+   | Enquiry message | `enquiry_message` |
+   | Enquiry reference | `enquiry_reference` |
+   | Enquiry consent | `enquiry_consent` |
 
-- `DATABASE_URL`: the database's *private* connection string. On DigitalOcean, bind it as `${<database-name>.DATABASE_PRIVATE_URL}`. Managed hosts require TLS and append `?ssl-mode=REQUIRED`; the server translates that for the MySQL driver. Optionally set `DATABASE_CA_CERT` (DigitalOcean: `${<database-name>.CA_CERT}`) so the server certificate is verified too.
-- `MAILERLITE_API_TOKEN` and `MAILERLITE_GROUP_ID`, once MailerLite is set up.
-- No `APP_ID`, `APP_SECRET` or `KIMI_*` variables are needed.
+   The standard `email`, `name` and `phone` fields are used as they are. Event date is a text field on purpose: the site sends `YYYY-MM-DD`, and a text field cannot reject it.
+3. **Embedded form.** In *Forms → Embedded forms*, create a form named "Hearts in Bloom enquiry". Add the Email field (required), Name, Phone and all nine custom fields above. In the form's settings:
+   - set the group to **Website enquiries**;
+   - turn **double opt-in off**, because this is an enquiry, not a mailing-list sign-up (with it on, the enquirer would get a confirmation email and stay unconfirmed until they click it);
+   - do not add any marketing or GDPR permission checkbox.
+4. **Embed details.** Publish the form, then open *Get the HTML code* (not the JavaScript code). Copy the form's endpoint, which looks like `https://assets.mailerlite.com/jsonp/<ACCOUNT_ID>/forms/<FORM_ID>/subscribe`, and the list of `fields[...]` names in that code. Put the two IDs in `src/enquiryConfig.ts`.
+5. **Test.** Send an enquiry from the live page, check it appears in the Website enquiries group with every field filled, then delete the test subscriber.
 
-Database setup: the image contains the SQL migrations and `dist/migrate.js`. Run `node dist/migrate.js` as a pre-deploy job in the same app (same image, same `DATABASE_URL`), so the table is created over the private network without opening the database to the internet. It only creates what is missing and never drops tables or data.
+Things to know:
 
-The GitHub Actions workflow runs the tests, type-check, lint and a production build on every push. It also starts the built server with a minimal environment and, against a throwaway MySQL 8 that accepts only encrypted connections, applies the migrations and checks that a submitted enquiry is stored. It does not publish a static copy with a non-working form. Point `heartsinbloom.co.uk` at the host using its current custom-domain instructions only after the temporary address has been fully tested.
+- Enquirers are ordinary MailerLite subscribers. They count towards your plan's subscriber limit, and MailerLite's charges depend on your plan and usage.
+- MailerLite does not alert you to new enquiries by itself. Check the Website enquiries group regularly, or set up an automation or notification if your plan offers one.
+- Only ever send campaigns to chosen groups, never to "all subscribers", so enquirers do not receive other mailings.
+- MailerLite text fields may limit how long a value can be. `MESSAGE_MAX_LENGTH` in `src/lib/enquiry.ts` (currently 1000 characters) caps the message. Lower it if MailerLite rejects long messages.
 
-Important DNS guidance:
+## Hosting on GitHub Pages
 
-- Update only the website records required by your chosen host. Do not overwrite existing `MX` records, or domain email may stop working.
-- DNS changes can take time to propagate.
-- Enable HTTPS after the host recognises the domain.
-- Moving DNS does not transfer the domain registration or mailbox hosting.
+The workflow in `.github/workflows/pages.yml` runs on every push and pull request: install, tests, type-check, lint, production build, build verification, and a check that every page, image and the 404 page are served correctly from a Pages-style folder. On pushes to `main` it then publishes `dist/` to GitHub Pages.
 
-## Editing content
+One-time repository setup (in the repository's *Settings*):
 
-- Shared business details, collection entries, packages, prices and FAQs: `src/data.ts`
-- Booking-guide content: `src/pages/BookingGuide.tsx`
-- Legal copy: `src/legal.ts`
-- Page content: `src/pages/`
-- Shared header, footer and enquiry band: `src/components/Layout.tsx`
-- Colours, typography and design tokens: `src/index.css`
-- Layout and responsive styling: `src/App.css`
-- Images: `public/images/`
-- Image provenance: `CREDITS.md`
+1. **Pages → Build and deployment → Source:** choose **GitHub Actions**.
+2. GitHub Pages is free for public repositories. For a private repository it needs a paid GitHub plan.
 
-`vite.config.ts` uses `base: '/'` because the intended deployment is the custom-domain root.
+Until the custom domain is connected, the site is at `https://<account>.github.io/hearts-in-bloom/`, which is why the workflow sets `VITE_BASE: /hearts-in-bloom/`.
 
-## Photography and fonts
+### Switching to the custom domain
 
-The site primarily uses Hearts in Bloom's own supplied imagery, with a small number of Pexels styling-inspiration photographs. Stock imagery is labelled as styling inspiration in the collection and is not presented as completed Hearts in Bloom work. See `CREDITS.md` for sources.
+Do these in order, and only once the temporary address has been fully tested:
 
-Marcellus and Jost are loaded from Google Fonts. For a fully self-hosted site, download and serve appropriately licensed font files locally instead.
+1. In the repository's *Settings → Pages → Custom domain*, enter `heartsinbloom.co.uk`.
+2. In Namesco's DNS settings, change **only the website records**:
+   - apex (`@`) `A` records: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+   - optionally the matching `AAAA` records listed in GitHub's current documentation
+   - `www` `CNAME` to `<account>.github.io`
+   - **Leave every `MX` record and all other email records (SPF, DKIM, DMARC) exactly as they are.** Do not transfer or cancel the domain or mailbox.
+3. When GitHub shows the DNS check as passed, tick **Enforce HTTPS**.
+4. Change `VITE_BASE` in `.github/workflows/pages.yml` to `/` and push, so the site is built for the root of the domain.
+5. Re-check the live pages, a direct link such as `/pricing`, the mobile layout and a test enquiry, then delete the test subscriber.
+
+## Privacy
+
+The privacy and cookies pages (`src/legal.ts`) describe this setup: enquiries are handled by MailerLite, the site is hosted on GitHub Pages, fonts come from Google Fonts, and no analytics or advertising cookies are used. If you add analytics, a different form provider or a different host, update those pages first.
+
+## Images and credits
+
+See `CREDITS.md`.
