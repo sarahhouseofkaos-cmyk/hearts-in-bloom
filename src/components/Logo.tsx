@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { asset } from '../lib/asset'
 
 export function HeartMark({ className = '' }: { className?: string }) {
   return (
@@ -12,7 +13,7 @@ export function HeartMark({ className = '' }: { className?: string }) {
 export default function Logo({ light = false }: { light?: boolean }) {
   return (
     <Link to="/" className={`brand ${light ? 'brand-light' : ''}`} aria-label="Hearts in Bloom home">
-      <img className="brand-mark" src="/images/hearts-in-bloom-logo.webp" alt="" width="754" height="1069" />
+      <img className="brand-mark" src={asset('/images/hearts-in-bloom-logo.webp')} alt="" width="754" height="1069" />
       <span className="brand-type">
         <span>Hearts <em>in</em> Bloom</span>
         <small>Wedding styling &amp; luxury hire</small>
