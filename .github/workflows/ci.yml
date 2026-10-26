@@ -56,3 +56,7 @@ jobs:
           kill $SERVER_PID || true
           cat server.log
           exit $fail
+      - name: Print generated initial migration (temporary)
+        run: |
+          DATABASE_URL="mysql://u:p@127.0.0.1:3306/x" npx drizzle-kit generate
+          for f in $(find db/migrations -type f | sort); do echo "=== FILE: $f"; cat "$f"; echo; done
