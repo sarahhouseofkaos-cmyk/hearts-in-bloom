@@ -1,0 +1,85 @@
+name: Build and deploy Hearts in Bloom
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # Where the site is served from. Use /hearts-in-bloom/ for the temporary
+  # https://<account>.github.io/hearts-in-bloom/ address. After the custom domain
+  # heartsinbloom.co.uk has been connected in the repository's Pages settings,
+  # change this to / (see README.md, "Switching to the custom domain").
+  VITE_BASE: /hearts-in-bloom/
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Test
+        run: npm test
+      - name: Type-check
+        run: npm run check
+      - name: Lint
+        run: npm run lint
+      - name: Build static site
+        run: npm run build
+      - name: Verify build output
+        run: npm run verify:build
+      - name: Serve the build as GitHub Pages would and check pages
+        run: |
+          if [ "$VITE_BASE" = "/" ]; then
+            SERVE_DIR=dist
+          else
+            mkdir -p _site
+            ln -s "$PWD/dist" "_site${VITE_BASE%/}"
+            SERVE_DIR=_site
+          fi
+          python3 -m http.server 4173 --directory "$SERVE_DIR" > pages-server.log 2>&1 &
+          for i in $(seq 1 20); do
+            curl -sf -o /dev/null "http://127.0.0.1:4173${VITE_BASE}" && break
+            sleep 1
+          done
+          fail=0
+          for route in "" collection/ dark-romance/ pricing/ about/ philosophy/ inspiration/ enquire/ booking-guide/ terms/ privacy/ cookies/ 404.html images/hero-heart-arch.webp favicon.png robots.txt sitemap.xml; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:4173${VITE_BASE}${route}")
+            echo "${code} ${VITE_BASE}${route}"
+            [ "$code" = "200" ] || fail=1
+          done
+          exit $fail
+      - name: Upload site artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
