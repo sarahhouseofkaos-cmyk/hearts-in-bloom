@@ -9,7 +9,9 @@ import type { PoolOptions } from "mysql2";
  *
  * - no ssl-mode, or DISABLED: plain connection (local development)
  * - REQUIRED / PREFERRED: encrypted. The server certificate is verified only
- *   when a CA certificate is supplied (DATABASE_CA_CERT); otherwise the link is
+ *   against the CA when a certificate is supplied (DATABASE_CA_CERT; the host name
+ *   is not checked, as managed hosts reach the database by internal names);
+ *   otherwise the link is
  *   encrypted but the server is not authenticated, matching MySQL's own meaning
  *   of REQUIRED. Use the host's private network connection for that case.
  * - VERIFY_CA / VERIFY_IDENTITY: encrypted and verified; a CA certificate is
@@ -48,7 +50,9 @@ export function parseDatabaseUrl(rawUrl: string, caCert?: string): PoolOptions {
     case "REQUIRED":
     case "REQUIRE":
     case "PREFERRED":
-      options.ssl = ca ? { ca, rejectUnauthorized: true } : { rejectUnauthorized: false };
+      options.ssl = ca
+        ? { ca, rejectUnauthorized: true, checkServerIdentity: () => undefined }
+        : { rejectUnauthorized: false };
       break;
     case "VERIFY_CA":
     case "VERIFY_IDENTITY":
