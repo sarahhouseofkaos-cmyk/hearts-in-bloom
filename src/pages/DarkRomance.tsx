@@ -4,6 +4,7 @@ import { ArrowRight, Check, Expand } from 'lucide-react'
 import { collection, type CollectionItem } from '../data'
 import { EnquiryBand, PageMeta } from '../components/Layout'
 import Lightbox from '../components/Lightbox'
+import { asset } from '../lib/asset'
 
 export default function DarkRomance() {
   const [selected, setSelected] = useState<CollectionItem | null>(null)
@@ -19,7 +20,7 @@ export default function DarkRomance() {
           <p>Rich florals, moody textures and a quietly dramatic spirit — created for gothic, alternative and darkly romantic celebrations.</p>
           <Link to="/enquire?style=dark-romance" className="button button-light">Enquire about Dark Romance <ArrowRight size={17} /></Link>
         </div>
-        <div className="dark-hero-image"><img src="/images/gothic-sweetheart-table.webp" alt="Couple seated at a candlelit Gothic sweetheart table by Hearts in Bloom" /></div>
+        <div className="dark-hero-image"><img src={asset('/images/gothic-sweetheart-table.webp')} alt="Couple seated at a candlelit Gothic sweetheart table by Hearts in Bloom" /></div>
       </section>
 
       <section className="dark-manifesto section-pad" data-reveal>

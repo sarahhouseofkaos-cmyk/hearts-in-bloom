@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { ArrowRight, MapPin } from 'lucide-react'
 import { EnquiryBand, PageMeta } from '../components/Layout'
+import { asset } from '../lib/asset'
 
 export default function About() {
   return (
@@ -13,8 +14,8 @@ export default function About() {
           <p>The quiet heart behind Hearts in Bloom — a small wedding-styling business built on romantic details, thoughtful choices and genuinely personal care.</p>
         </div>
         <div className="about-hero-images">
-          <img className="about-image-main" src="/images/styling-detail.webp" alt="Carefully arranged wedding florals" />
-          <img className="about-image-small" src="/images/throne-chairs.webp" alt="Hearts in Bloom statement seating" />
+          <img className="about-image-main" src={asset('/images/styling-detail.webp')} alt="Carefully arranged wedding florals" />
+          <img className="about-image-small" src={asset('/images/throne-chairs.webp')} alt="Hearts in Bloom statement seating" />
         </div>
       </section>
 

@@ -3,7 +3,8 @@ import { Link, useSearchParams } from 'react-router'
 import { ArrowRight, Check, LoaderCircle, Mail } from 'lucide-react'
 import { collection, email } from '../data'
 import { PageMeta } from '../components/Layout'
-import { trpc } from '../providers/trpc'
+import { enquiryForm } from '../enquiryConfig'
+import { EnquiryError, MESSAGE_MAX_LENGTH, isFormConfigured, submitEnquiry, todayIso } from '../lib/enquiry'
 
 export default function Enquire() {
   const [params] = useSearchParams()
@@ -11,12 +12,13 @@ export default function Enquire() {
   const [error, setError] = useState('')
   const [startedAt, setStartedAt] = useState(() => Date.now())
   const successRef = useRef<HTMLDivElement>(null)
-  const submitEnquiry = trpc.enquiry.submit.useMutation()
+  const [sending, setSending] = useState(false)
+  const formReady = isFormConfigured(enquiryForm)
   const requestedStyle = params.get('style')
   const requestedPackage = params.get('package')
   const styleName = collection.find((item) => item.slug === requestedStyle)?.name ?? (requestedStyle === 'dark-romance' ? 'Dark Romance / not sure yet' : '')
   const packageName = requestedPackage ? requestedPackage.split('-').map((word) => word === 'the' ? 'The' : word[0].toUpperCase() + word.slice(1)).join(' ') : ''
-  const minimumDate = new Date().toISOString().slice(0, 10)
+  const minimumDate = todayIso()
 
   useEffect(() => {
     if (reference) successRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -36,25 +38,30 @@ export default function Enquire() {
       setError('Please confirm that we may use your details to respond to your enquiry.')
       return
     }
+    setSending(true)
     try {
-      const result = await submitEnquiry.mutateAsync({
-        name: String(data.get('name') || ''),
-        email: String(data.get('email') || ''),
-        phone: String(data.get('phone') || ''),
-        eventDate: String(data.get('date') || ''),
-        venue: String(data.get('venue') || ''),
-        service: String(data.get('service') || '') as 'Heart arch (undressed)',
-        packageName: String(data.get('packageName') || ''),
-        style: String(data.get('style') || ''),
-        coverage: String(data.get('coverage') || ''),
-        message: String(data.get('message') || ''),
-        consent: true,
-        website: String(data.get('website') || ''),
+      const result = await submitEnquiry({
+        config: enquiryForm,
         startedAt,
+        values: {
+          name: String(data.get('name') || ''),
+          email: String(data.get('email') || ''),
+          phone: String(data.get('phone') || ''),
+          eventDate: String(data.get('date') || ''),
+          venue: String(data.get('venue') || ''),
+          service: String(data.get('service') || ''),
+          packageName: String(data.get('packageName') || ''),
+          style: String(data.get('style') || ''),
+          coverage: String(data.get('coverage') || ''),
+          message: String(data.get('message') || ''),
+          website: String(data.get('website') || ''),
+        },
       })
       setReference(result.reference)
     } catch (submissionError) {
-      setError(submissionError instanceof Error ? submissionError.message : 'Your enquiry could not be sent. Please try again or email Sarah directly.')
+      setError(submissionError instanceof EnquiryError ? submissionError.message : 'Your enquiry could not be sent. Please try again or email Sarah directly.')
+    } finally {
+      setSending(false)
     }
   }
 
@@ -87,7 +94,7 @@ export default function Enquire() {
               <span className="success-icon"><Check size={28} /></span>
               <p className="eyebrow">Enquiry received</p>
               <h2>Thank you.<br /><em>Your day is in our thoughts.</em></h2>
-              <p>Your enquiry has been received by Hearts in Bloom. Sarah will reply personally, usually within 24–48 hours.</p>
+              <p>Your enquiry has been sent to Hearts in Bloom. Sarah will reply personally, usually within 24–48 hours.</p>
               <div className="enquiry-reference"><span>Your reference</span><strong>{reference}</strong></div>
               <p className="success-note">Keep this reference with your enquiry. If your plans change, you can reply to Sarah with it.</p>
               <button type="button" className="button button-outline" onClick={startAnotherEnquiry}>Send another enquiry <ArrowRight size={16} /></button>
@@ -133,13 +140,14 @@ export default function Enquire() {
                 </label>
               </div>
               {requestedPackage && <label>Selected package<input name="packageName" value={packageName} readOnly /></label>}
-              <label>Your vision<textarea name="message" rows={5} maxLength={3000} placeholder="Tell us about your colours, atmosphere, timings, venue access or anything else that matters to you." /></label>
+              <label>Your vision<textarea name="message" rows={5} maxLength={MESSAGE_MAX_LENGTH} placeholder="Tell us about your colours, atmosphere, timings, venue access or anything else that matters to you." /></label>
               <label className="form-hp" aria-hidden="true">Website<input name="website" type="text" tabIndex={-1} autoComplete="off" /></label>
-              <label className="consent-field"><input name="consent" type="checkbox" required /><span>I’m happy for Hearts in Bloom to use these details to respond to my enquiry, as explained in the <Link to="/privacy">Privacy Policy</Link>. *</span></label>
-              <p className="form-note">Your enquiry is submitted securely through this website for Hearts in Bloom to respond. Your email app does not need to open.</p>
+              <label className="consent-field"><input name="consent" type="checkbox" required /><span>I’m happy for Hearts in Bloom to use these details to respond to my enquiry, as explained in the <Link to="/privacy">Privacy Policy</Link>. This does not sign me up to marketing emails. *</span></label>
+              <p className="form-note">Your enquiry is sent securely to Hearts in Bloom through MailerLite, the service we use to receive and keep track of enquiries. Your email app does not need to open, and sending an enquiry does not subscribe you to any mailing list.</p>
+              {!formReady && <div className="form-error" role="status"><p>Online enquiries are being set up and will be available very soon.</p><a href={`mailto:${email}`}>Email {email} in the meantime</a></div>}
               {error && <div className="form-error" role="alert"><p>{error}</p><a href={`mailto:${email}`}>Email {email} instead</a></div>}
-              <button type="submit" className="button button-primary form-submit" disabled={submitEnquiry.isPending}>
-                {submitEnquiry.isPending ? <>Sending your enquiry <LoaderCircle className="spin" size={17} /></> : <>Send my enquiry <ArrowRight size={17} /></>}
+              <button type="submit" className="button button-primary form-submit" disabled={sending || !formReady}>
+                {sending ? <>Sending your enquiry <LoaderCircle className="spin" size={17} /></> : <>Send my enquiry <ArrowRight size={17} /></>}
               </button>
             </form>
           )}
