@@ -22,9 +22,37 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Test
+        run: npm test
       - name: Type-check
         run: npm run check
       - name: Lint
         run: npm run lint
       - name: Build full-stack site
         run: npm run build
+      - name: Production start-up smoke test (no Kimi-specific variables)
+        run: |
+          # Start the built server with a deliberately minimal environment:
+          # no APP_ID, APP_SECRET, KIMI_* or MailerLite variables. The database
+          # URL points at nothing; connections are lazy, so the server and the
+          # static site must still come up.
+          env -i PATH="$PATH" HOME="$HOME" NODE_ENV=production PORT=3100 \
+            DATABASE_URL="mysql://user:pass@127.0.0.1:3306/smoke" \
+            node dist/boot.js > server.log 2>&1 &
+          SERVER_PID=$!
+          for i in $(seq 1 30); do
+            if curl -sf -o /dev/null http://127.0.0.1:3100/; then break; fi
+            sleep 1
+          done
+          fail=0
+          for path in / /about /enquire /no-such-page; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -H 'Accept: text/html' "http://127.0.0.1:3100$path")
+            echo "GET $path -> $code"
+            [ "$code" = "200" ] || fail=1
+          done
+          code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3100/api/not-a-route)
+          echo "GET /api/not-a-route -> $code"
+          [ "$code" = "404" ] || fail=1
+          kill $SERVER_PID || true
+          cat server.log
+          exit $fail
