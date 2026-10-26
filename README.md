@@ -65,7 +65,7 @@ Use Node.js 20 or newer and a MySQL-compatible database.
 
 1. Install dependencies: `npm ci`
 2. Provide `DATABASE_URL` in `.env`. Add `MAILERLITE_API_TOKEN` and `MAILERLITE_GROUP_ID` after completing the MailerLite setup below. Never commit credentials.
-3. Create or update the database table: `npm run db:push`
+3. Create the database table: `npm run build && node dist/migrate.js` (applies the committed SQL migrations in `db/migrations`; safe to re-run). `npm run db:push` also works for local experiments.
 4. Start the site: `npm run dev`
 
 Open `http://localhost:3000`. The development server includes the frontend and API.
@@ -73,6 +73,7 @@ Open `http://localhost:3000`. The development server includes the frontend and A
 ## Quality checks and production build
 
 ```bash
+npm test
 npm run check
 npm run lint
 npm run build
@@ -101,7 +102,17 @@ No password, database credential or access token is stored in this project. Auth
 
 GitHub remains the source-code repository, but **GitHub Pages is no longer sufficient**: it serves static files only and cannot run the enquiry API or database connection.
 
-Deploy the project to a Node.js host that supports the included `Dockerfile` or runs `npm start`. Configure the production `DATABASE_URL`, `MAILERLITE_API_TOKEN` and `MAILERLITE_GROUP_ID`, run the database schema setup, and point `heartsinbloom.co.uk` to that host using its current custom-domain instructions. The GitHub Actions workflow runs type-checking, linting and a production build on each push; it does not publish a static copy with a non-working form.
+Deploy the project to a Node.js host that supports the included `Dockerfile` or runs `npm start`. The reference setup is DigitalOcean App Platform (built from the Dockerfile) with a DigitalOcean Managed MySQL database in the same region.
+
+Runtime variables for the web service (set them in the host's secure variables, never in Git):
+
+- `DATABASE_URL`: the database's *private* connection string. On DigitalOcean, bind it as `${<database-name>.DATABASE_PRIVATE_URL}`. Managed hosts require TLS and append `?ssl-mode=REQUIRED`; the server translates that for the MySQL driver. Optionally set `DATABASE_CA_CERT` (DigitalOcean: `${<database-name>.CA_CERT}`) so the server certificate is verified too.
+- `MAILERLITE_API_TOKEN` and `MAILERLITE_GROUP_ID`, once MailerLite is set up.
+- No `APP_ID`, `APP_SECRET` or `KIMI_*` variables are needed.
+
+Database setup: the image contains the SQL migrations and `dist/migrate.js`. Run `node dist/migrate.js` as a pre-deploy job in the same app (same image, same `DATABASE_URL`), so the table is created over the private network without opening the database to the internet. It only creates what is missing and never drops tables or data.
+
+The GitHub Actions workflow runs the tests, type-check, lint and a production build on every push. It also starts the built server with a minimal environment and, against a throwaway MySQL 8 that accepts only encrypted connections, applies the migrations and checks that a submitted enquiry is stored. It does not publish a static copy with a non-working form. Point `heartsinbloom.co.uk` at the host using its current custom-domain instructions only after the temporary address has been fully tested.
 
 Important DNS guidance:
 
