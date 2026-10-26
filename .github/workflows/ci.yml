@@ -12,6 +12,19 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ci-only-password
+          MYSQL_DATABASE: hib_ci
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pci-only-password"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -56,7 +69,68 @@ jobs:
           kill $SERVER_PID || true
           cat server.log
           exit $fail
-      - name: Print generated initial migration (temporary)
+      - name: Database migration, TLS and enquiry persistence test (MySQL 8)
         run: |
+          set -e
+          ROOT="mysql://root:ci-only-password@127.0.0.1:3306/hib_ci"
+          PLAIN="mysql://hib_tls:ci-tls-password@127.0.0.1:3306/hib_ci"
+          TLS="$PLAIN?ssl-mode=REQUIRED"
+
+          # A database user that refuses unencrypted connections, like a managed host.
+          DATABASE_URL="$ROOT" node -e '
+            const mysql = require("mysql2/promise");
+            (async () => {
+              const c = await mysql.createConnection({ uri: process.env.DATABASE_URL });
+              await c.query("CREATE USER \"hib_tls\"@\"%\" IDENTIFIED BY \"ci-tls-password\" REQUIRE SSL");
+              await c.query("GRANT ALL ON hib_ci.* TO \"hib_tls\"@\"%\"");
+              await c.end();
+            })().catch((e) => { console.error(e.message); process.exit(1); });
+          '
+
+          echo "Without ssl-mode the TLS-only user must be refused:"
+          if DATABASE_URL="$PLAIN" node dist/migrate.js; then
+            echo "Unexpected success without TLS"; exit 1
+          fi
+
+          echo "With ssl-mode=REQUIRED the migration must apply, and re-running must be harmless:"
+          DATABASE_URL="$TLS" node dist/migrate.js
+          DATABASE_URL="$TLS" node dist/migrate.js
+
+          echo "Start the production server (minimal environment, TLS-only database user):"
+          env -i PATH="$PATH" HOME="$HOME" NODE_ENV=production PORT=3200 DATABASE_URL="$TLS" \
+            node dist/boot.js > server-db.log 2>&1 &
+          SERVER_PID=$!
+          for i in $(seq 1 30); do
+            if curl -sf -o /dev/null http://127.0.0.1:3200/; then break; fi
+            sleep 1
+          done
+
+          EVENT_DATE=$(date -u -d '+60 days' +%F)
+          STARTED=$(( $(date +%s%3N) - 5000 ))
+          BODY="{\"json\":{\"name\":\"CI Test\",\"email\":\"ci-test@example.com\",\"phone\":\"\",\"eventDate\":\"$EVENT_DATE\",\"venue\":\"CI venue\",\"service\":\"Throne chairs\",\"packageName\":\"\",\"style\":\"\",\"coverage\":\"\",\"message\":\"Automated persistence test\",\"consent\":true,\"website\":\"\",\"startedAt\":$STARTED}}"
+          RESPONSE=$(curl -s -X POST http://127.0.0.1:3200/api/trpc/enquiry.submit -H 'content-type: application/json' -d "$BODY")
+          kill $SERVER_PID || true
+          echo "$RESPONSE"
+          REF=$(echo "$RESPONSE" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(JSON.parse(s).result.data.json.reference))')
+          echo "Reference returned: $REF"
+
+          echo "The enquiry must now be stored in MySQL:"
+          DATABASE_URL="$ROOT" REF="$REF" node -e '
+            const mysql = require("mysql2/promise");
+            (async () => {
+              const c = await mysql.createConnection({ uri: process.env.DATABASE_URL });
+              const [rows] = await c.query("SELECT reference, status, email FROM enquiries WHERE reference = ?", [process.env.REF]);
+              await c.end();
+              console.log(JSON.stringify(rows));
+              if (rows.length !== 1 || rows[0].status !== "new") process.exit(1);
+            })().catch((e) => { console.error(e.message); process.exit(1); });
+          '
+      - name: Print generated snapshot and journal (temporary)
+        run: |
+          mv db/migrations /tmp/mig-backup
           DATABASE_URL="mysql://u:p@127.0.0.1:3306/x" npx drizzle-kit generate
-          for f in $(find db/migrations -type f | sort); do echo "=== FILE: $f"; cat "$f"; echo; done
+          for f in db/migrations/meta/_journal.json db/migrations/meta/0000_snapshot.json; do
+            echo "=== FILE: $f"
+            node -e 'process.stdout.write(JSON.stringify(JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"))))' "$f"
+            echo
+          done
