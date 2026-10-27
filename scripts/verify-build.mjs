@@ -15,7 +15,7 @@ function walk(dir) {
   })
 }
 
-const routes = ['collection', 'dark-romance', 'pricing', 'about', 'philosophy', 'inspiration', 'enquire', 'booking-guide', 'terms', 'privacy', 'cookies']
+const routes = ['collection', 'dark-romance', 'pricing', 'about', 'philosophy', 'inspiration', 'enquire', 'booking-guide', 'areas', 'planners', 'terms', 'privacy', 'cookies']
 for (const page of ['index.html', '404.html', ...routes.map((r) => `${r}/index.html`)]) {
   if (!existsSync(join(dist, page))) fail(`Missing ${page}`)
 }
