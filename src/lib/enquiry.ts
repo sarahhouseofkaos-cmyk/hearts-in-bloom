@@ -84,12 +84,16 @@ export function validateEnquiry(values: EnquiryValues, now: Date = new Date()): 
 /**
  * Maps the enquiry onto the MailerLite form's field names. The custom fields
  * (event_date, venue, ...) must exist in MailerLite and be added to the form;
- * see README.md. Empty optional values are left out.
+ * see README.md. MailerLite silently drops a submission (while still replying
+ * success) if a field marked required on the form is missing, so optional
+ * fields that were left blank are sent as NOT_PROVIDED instead of omitted.
  */
+export const NOT_PROVIDED = 'Not provided'
+
 export function buildPayload(values: EnquiryValues, reference: string, now: Date = new Date()): FormData {
   const data = new FormData()
   const add = (key: string, value: string) => {
-    if (value.trim() !== '') data.append(`fields[${key}]`, value.trim())
+    data.append(`fields[${key}]`, value.trim() === '' ? NOT_PROVIDED : value.trim())
   }
   add('email', values.email)
   add('name', values.name)

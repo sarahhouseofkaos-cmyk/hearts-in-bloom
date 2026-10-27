@@ -95,11 +95,11 @@ describe('buildPayload', () => {
     expect(data.get('anticsrf')).toBe('true')
   })
 
-  it('leaves out empty optional fields', () => {
+  it('sends a placeholder for empty optional fields so MailerLite does not drop them', () => {
     const data = buildPayload(valid, 'HIB-ABCD1234', now)
-    expect(data.has('fields[phone]')).toBe(false)
-    expect(data.has('fields[package]')).toBe(false)
-    expect(data.has('fields[floral_coverage]')).toBe(false)
+    expect(data.get('fields[phone]')).toBe('Not provided')
+    expect(data.get('fields[package]')).toBe('Not provided')
+    expect(data.get('fields[floral_coverage]')).toBe('Not provided')
   })
 
   it('records enquiry consent separately and never marketing consent', () => {
