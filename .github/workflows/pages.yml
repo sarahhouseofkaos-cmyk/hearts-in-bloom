@@ -54,7 +54,7 @@ jobs:
             sleep 1
           done
           fail=0
-          for route in "" collection/ dark-romance/ pricing/ about/ philosophy/ inspiration/ enquire/ booking-guide/ terms/ privacy/ cookies/ 404.html images/hero-heart-arch.webp favicon.png robots.txt sitemap.xml; do
+          for route in "" collection/ dark-romance/ pricing/ about/ philosophy/ inspiration/ enquire/ booking-guide/ areas/ planners/ terms/ privacy/ cookies/ 404.html images/hero-heart-arch.webp favicon.png robots.txt sitemap.xml; do
             code=$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:4173${VITE_BASE}${route}")
             echo "${code} ${VITE_BASE}${route}"
             [ "$code" = "200" ] || fail=1
