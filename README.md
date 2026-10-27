@@ -95,7 +95,7 @@ One-time repository setup (in the repository's *Settings*):
 1. **Pages → Build and deployment → Source:** choose **GitHub Actions**.
 2. GitHub Pages is free for public repositories. For a private repository it needs a paid GitHub plan.
 
-Until the custom domain is connected, the site is at `https://<account>.github.io/hearts-in-bloom/`, which is why the workflow sets `VITE_BASE: /hearts-in-bloom/`.
+The site is served from the root of the custom domain, so the workflow sets `VITE_BASE: /`. (Before the domain was connected it used `/hearts-in-bloom/` for the temporary github.io address.)
 
 ### Switching to the custom domain
 
