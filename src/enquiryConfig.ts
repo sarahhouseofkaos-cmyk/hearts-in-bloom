@@ -11,7 +11,7 @@
  */
 export const enquiryForm = {
   /** MailerLite account ID, for example "1234567". */
-  accountId: '',
+  accountId: '2721543',
   /** MailerLite form ID, for example "123456789012345678". */
-  formId: '',
+  formId: '202441603455911730',
 }
