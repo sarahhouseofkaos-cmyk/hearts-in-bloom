@@ -22,6 +22,8 @@ export const routes = [
   'inspiration',
   'enquire',
   'booking-guide',
+  'areas',
+  'planners',
   'terms',
   'privacy',
   'cookies',

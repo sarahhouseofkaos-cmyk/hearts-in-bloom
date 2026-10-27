@@ -2,6 +2,7 @@ import { Link } from 'react-router'
 import { ArrowDownRight, ArrowRight, Check } from 'lucide-react'
 import { EnquiryBand, PageMeta } from '../components/Layout'
 import { asset } from '../lib/asset'
+import { RealWeddings, Testimonials } from '../components/Proof'
 
 export default function Home() {
   return (
@@ -17,7 +18,7 @@ export default function Home() {
             <Link to="/enquire" className="text-link">Check your date <ArrowDownRight size={16} /></Link>
           </div>
           <div className="hero-note">
-            <span>Personal service</span><span>Delivery &amp; set-up</span><span>Silk or fresh florals</span>
+            <span>Arches from £150</span><span>Free delivery within ~40 miles</span><span>Replies in 24–48 hours</span>
           </div>
         </div>
         <div className="hero-visual">
@@ -75,7 +76,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="pricing-preview section-pad" data-reveal>
+      <RealWeddings />
+<Testimonials />
+
+<section className="pricing-preview section-pad" data-reveal>
         <div className="pricing-preview-intro">
           <p className="eyebrow">Packages from £400</p>
           <h2>Beautifully simple.<br />Clearly priced.</h2>

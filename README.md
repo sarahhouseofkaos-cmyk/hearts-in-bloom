@@ -111,6 +111,15 @@ Do these in order, and only once the temporary address has been fully tested:
 4. Change `VITE_BASE` in `.github/workflows/pages.yml` to `/` and push, so the site is built for the root of the domain.
 5. Re-check the live pages, a direct link such as `/pricing`, the mobile layout and a test enquiry, then delete the test subscriber.
 
+## Testimonials and real weddings
+
+`src/proof.ts` holds two lists, `testimonials` and `realWeddings`. Both are empty on purpose: nothing appears on the site until real entries are added, and nothing should be invented. Add an entry (with the couple's permission), put the photo in `public/images/`, push, and the Home page shows the section automatically.
+
+## Search and contact details
+
+- Structured data (business details and FAQs) is in `index.html` and `src/pages/Pricing.tsx`.
+- Each page sets its own canonical address and social-preview title. `public/sitemap.xml` lists every page, so add new pages there and to the route lists in `src/App.tsx`, `scripts/static-pages.mjs`, `scripts/verify-build.mjs` and `.github/workflows/pages.yml`.
+
 ## Privacy
 
 The privacy and cookies pages (`src/legal.ts`) describe this setup: enquiries are handled by MailerLite, the site is hosted on GitHub Pages, fonts come from Google Fonts, and no analytics or advertising cookies are used. If you add analytics, a different form provider or a different host, update those pages first.

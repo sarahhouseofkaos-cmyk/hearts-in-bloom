@@ -2,12 +2,23 @@ import { Link } from 'react-router'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ArrowRight, Check, Plus } from 'lucide-react'
 import { faqs, individualPrices, packages } from '../data'
-import { EnquiryBand, PageMeta } from '../components/Layout'
+import { EnquiryBand, JsonLd, PageMeta } from '../components/Layout'
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+}
 
 export default function Pricing() {
   return (
     <>
       <PageMeta title="Packages & Pricing" description="Heart arch hire from £150 and wedding packages from £400. Clear pricing, personal quotations and free local delivery from Hearts in Bloom." />
+      <JsonLd id="faq-jsonld" data={faqSchema} />
       <section className="page-hero pricing-hero">
         <p className="eyebrow">Packages &amp; pricing</p>
         <h1>Beautiful moments.<br /><em>Beautifully clear.</em></h1>
