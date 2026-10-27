@@ -9,6 +9,8 @@ import About from './pages/About'
 import Inspiration from './pages/Inspiration'
 import Enquire from './pages/Enquire'
 import BookingGuide from './pages/BookingGuide'
+import Areas from './pages/Areas'
+import Planners from './pages/Planners'
 import Legal from './pages/Legal'
 import NotFound from './pages/NotFound'
 import './App.css'
@@ -47,6 +49,8 @@ export default function App() {
         <Route path="/inspiration" element={<Inspiration />} />
         <Route path="/enquire" element={<Enquire />} />
           <Route path="/booking-guide" element={<BookingGuide />} />
+        <Route path="/areas" element={<Areas />} />
+        <Route path="/planners" element={<Planners />} />
         <Route path="/terms" element={<Legal />} />
         <Route path="/privacy" element={<Legal />} />
         <Route path="/cookies" element={<Legal />} />
