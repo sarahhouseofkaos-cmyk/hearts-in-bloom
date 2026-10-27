@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { ArrowDownRight, ArrowRight, Check } from 'lucide-react'
 import { EnquiryBand, PageMeta } from '../components/Layout'
+import { asset } from '../lib/asset'
 
 export default function Home() {
   return (
@@ -20,7 +21,7 @@ export default function Home() {
           </div>
         </div>
         <div className="hero-visual">
-          <img src="/images/hero-heart-arch.webp" alt="A couple beneath a romantic floral heart arch" fetchPriority="high" />
+          <img src={asset('/images/hero-heart-arch.webp')} alt="A couple beneath a romantic floral heart arch" fetchPriority="high" />
           <div className="hero-caption"><span>Signature heart arches</span><span>Made for your moment</span></div>
         </div>
       </section>
@@ -33,7 +34,7 @@ export default function Home() {
 
       <section className="feature-split" data-reveal>
         <div className="feature-image mask-image">
-          <img src="/images/soft-blush-garden.webp" alt="Soft blush floral arch in a garden" loading="lazy" />
+          <img src={asset('/images/soft-blush-garden.webp')} alt="Soft blush floral arch in a garden" loading="lazy" />
           <span className="image-index">The Romantic Collection</span>
         </div>
         <div className="feature-copy">
@@ -51,7 +52,7 @@ export default function Home() {
 
       <section className="feature-split feature-reverse dark-feature" data-reveal>
         <div className="feature-image mask-image">
-          <img src="/images/gothic-throne-portrait.webp" alt="Hearts in Bloom Gothic throne chairs and candlelit wedding styling" loading="lazy" />
+          <img src={asset('/images/gothic-throne-portrait.webp')} alt="Hearts in Bloom Gothic throne chairs and candlelit wedding styling" loading="lazy" />
           <span className="image-index">The Dark Romance Collection</span>
         </div>
         <div className="feature-copy">
@@ -68,9 +69,9 @@ export default function Home() {
           <p>Ceremony backdrop, portrait setting or sweetheart table — each piece is styled to belong naturally in your celebration.</p>
         </div>
         <div className="editorial-gallery">
-          <figure className="gallery-tall"><img src="/images/throne-chairs.webp" alt="Hearts in Bloom gold throne chairs" loading="lazy" /><figcaption>Statement seating</figcaption></figure>
-          <figure><img src="/images/classic-ivory.webp" alt="Ivory floral detail from a Hearts in Bloom heart arch" loading="lazy" /><figcaption>Considered details</figcaption></figure>
-          <figure><img src="/images/ceremony-inspiration.webp" alt="Couple framed by a Hearts in Bloom floral heart arch" loading="lazy" /><figcaption>Your moment, framed</figcaption></figure>
+          <figure className="gallery-tall"><img src={asset('/images/throne-chairs.webp')} alt="Hearts in Bloom gold throne chairs" loading="lazy" /><figcaption>Statement seating</figcaption></figure>
+          <figure><img src={asset('/images/classic-ivory.webp')} alt="Ivory floral detail from a Hearts in Bloom heart arch" loading="lazy" /><figcaption>Considered details</figcaption></figure>
+          <figure><img src={asset('/images/ceremony-inspiration.webp')} alt="Couple framed by a Hearts in Bloom floral heart arch" loading="lazy" /><figcaption>Your moment, framed</figcaption></figure>
         </div>
       </section>
 
@@ -100,7 +101,7 @@ export default function Home() {
       </section>
 
       <section className="about-preview" data-reveal>
-        <div className="about-preview-image mask-image"><img src="/images/lush-ivory-greenery.webp" alt="Ivory floral heart arch styling by Hearts in Bloom" loading="lazy" /></div>
+        <div className="about-preview-image mask-image"><img src={asset('/images/lush-ivory-greenery.webp')} alt="Ivory floral heart arch styling by Hearts in Bloom" loading="lazy" /></div>
         <div className="about-preview-copy">
           <p className="eyebrow">The quiet heart behind the business</p>
           <h2>Hello, I’m Sarah.</h2>

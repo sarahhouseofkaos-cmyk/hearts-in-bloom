@@ -1,11 +1,12 @@
 import { Link } from 'react-router'
 import { ArrowDown, ArrowRight } from 'lucide-react'
 import { EnquiryBand, PageMeta } from '../components/Layout'
+import { asset } from '../lib/asset'
 
 const guides = [
-  { id: 'choosing-your-colours', category: 'Finding your palette', title: 'Choosing your colours', image: '/images/soft-blush-garden.webp' },
-  { id: 'styling-a-heart-arch', category: 'Ceremony styling', title: 'How to style a heart arch', image: '/images/hero-heart-arch.webp' },
-  { id: 'dark-romance-ideas', category: 'Alternative romance', title: 'Dark Romance wedding ideas', image: '/images/gothic-sweetheart-table.webp' },
+  { id: 'choosing-your-colours', category: 'Finding your palette', title: 'Choosing your colours', image: asset('/images/soft-blush-garden.webp') },
+  { id: 'styling-a-heart-arch', category: 'Ceremony styling', title: 'How to style a heart arch', image: asset('/images/hero-heart-arch.webp') },
+  { id: 'dark-romance-ideas', category: 'Alternative romance', title: 'Dark Romance wedding ideas', image: asset('/images/gothic-sweetheart-table.webp') },
 ]
 
 export default function Inspiration() {
@@ -27,7 +28,7 @@ export default function Inspiration() {
       </nav>
 
       <article className="guide-article section-pad" id="choosing-your-colours">
-        <div className="guide-image mask-image"><img src="/images/soft-blush-garden.webp" alt="Blush pink floral arch colour inspiration" loading="lazy" /></div>
+        <div className="guide-image mask-image"><img src={asset('/images/soft-blush-garden.webp')} alt="Blush pink floral arch colour inspiration" loading="lazy" /></div>
         <div className="guide-copy">
           <p className="eyebrow">Finding your palette</p>
           <h2>Choosing your colours</h2>
@@ -42,7 +43,7 @@ export default function Inspiration() {
       </article>
 
       <article className="guide-article guide-reverse section-pad" id="styling-a-heart-arch">
-        <div className="guide-image mask-image"><img src="/images/hero-heart-arch.webp" alt="Couple framed by a floral heart arch" loading="lazy" /></div>
+        <div className="guide-image mask-image"><img src={asset('/images/hero-heart-arch.webp')} alt="Couple framed by a floral heart arch" loading="lazy" /></div>
         <div className="guide-copy">
           <p className="eyebrow">Ceremony styling</p>
           <h2>How to style a heart arch</h2>
@@ -57,7 +58,7 @@ export default function Inspiration() {
       </article>
 
       <article className="guide-article section-pad" id="dark-romance-ideas">
-        <div className="guide-image mask-image"><img src="/images/gothic-sweetheart-table.webp" alt="Candlelit Gothic sweetheart table with black throne chairs" loading="lazy" /></div>
+        <div className="guide-image mask-image"><img src={asset('/images/gothic-sweetheart-table.webp')} alt="Candlelit Gothic sweetheart table with black throne chairs" loading="lazy" /></div>
         <div className="guide-copy">
           <p className="eyebrow">Alternative romance</p>
           <h2>Dark Romance wedding ideas</h2>

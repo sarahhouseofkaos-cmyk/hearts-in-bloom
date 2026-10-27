@@ -4,6 +4,7 @@ import { ArrowRight, Expand } from 'lucide-react'
 import { collection, type CollectionItem } from '../data'
 import { EnquiryBand, PageMeta } from '../components/Layout'
 import Lightbox from '../components/Lightbox'
+import { asset } from '../lib/asset'
 
 type Filter = 'all' | 'romantic' | 'dark'
 
@@ -52,7 +53,7 @@ export default function Collection() {
       </section>
 
       <section className="throne-feature" data-reveal>
-        <img src="/images/throne-chairs.webp" alt="Hearts in Bloom luxury throne chairs" loading="lazy" />
+        <img src={asset('/images/throne-chairs.webp')} alt="Hearts in Bloom luxury throne chairs" loading="lazy" />
         <div>
           <p className="eyebrow">Also available</p>
           <h2>A seat worthy<br />of the moment.</h2>
