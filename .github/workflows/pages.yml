@@ -14,7 +14,7 @@ env:
   # https://<account>.github.io/hearts-in-bloom/ address. After the custom domain
   # heartsinbloom.co.uk has been connected in the repository's Pages settings,
   # change this to / (see README.md, "Switching to the custom domain").
-  VITE_BASE: /hearts-in-bloom/
+  VITE_BASE: /
 
 jobs:
   build:
