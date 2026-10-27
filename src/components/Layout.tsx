@@ -13,13 +13,56 @@ const nav = [
   { to: '/inspiration', label: 'Inspiration' },
 ]
 
+const SITE_URL = 'https://heartsinbloom.co.uk'
+
+function setHeadTag(selector: string, create: () => HTMLElement, attribute: string, value: string) {
+  let element = document.head.querySelector<HTMLElement>(selector)
+  if (!element) {
+    element = create()
+    document.head.appendChild(element)
+  }
+  element.setAttribute(attribute, value)
+}
+
 export function PageMeta({ title, description }: { title: string; description: string }) {
+  const { pathname } = useLocation()
   useEffect(() => {
-    document.title = `${title} | Hearts in Bloom`
+    const fullTitle = `${title} | Hearts in Bloom`
+    document.title = fullTitle
     const meta = document.querySelector('meta[name="description"]')
     if (meta) meta.setAttribute('content', description)
-  }, [title, description])
+    const url = SITE_URL + (pathname === '/' ? '/' : pathname.replace(/\/$/, ''))
+    setHeadTag('link[rel="canonical"]', () => Object.assign(document.createElement('link'), { rel: 'canonical' }), 'href', url)
+    const og = (property: string, content: string) =>
+      setHeadTag(`meta[property="${property}"]`, () => { const m = document.createElement('meta'); m.setAttribute('property', property); return m }, 'content', content)
+    og('og:title', fullTitle)
+    og('og:description', description)
+    og('og:url', url)
+  }, [title, description, pathname])
   return null
+}
+
+/** Adds a JSON-LD block (structured data for search engines) while the page is shown. */
+export function JsonLd({ id, data }: { id: string; data: object }) {
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.type = 'application/ld+json'
+    script.id = id
+    script.textContent = JSON.stringify(data)
+    document.head.appendChild(script)
+    return () => { script.remove() }
+  }, [id, data])
+  return null
+}
+
+function MobileCta() {
+  const { pathname } = useLocation()
+  if (pathname.startsWith('/enquire')) return null
+  return (
+    <div className="mobile-cta">
+      <Link to="/enquire" className="button button-primary">Check your date <ArrowRight size={16} /></Link>
+    </div>
+  )
 }
 
 function ScrollManager() {
@@ -109,6 +152,8 @@ function Footer() {
           <Link to="/pricing">Packages &amp; pricing</Link>
           <Link to="/inspiration">Ideas &amp; inspiration</Link>
           <Link to="/booking-guide">Practical booking guide</Link>
+          <Link to="/areas">Where we deliver</Link>
+          <Link to="/planners">For planners &amp; venues</Link>
         </div>
         <div className="footer-column">
           <h3>Hearts in Bloom</h3>
@@ -135,6 +180,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <Header />
       <main id="main-content">{children}</main>
       <Footer />
+      <MobileCta />
     </>
   )
 }
