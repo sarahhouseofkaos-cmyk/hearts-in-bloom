@@ -1584,10 +1584,9 @@ h3 { line-height: 1.2; }
 }
 
 /* Collection page extras */
-.cl-hero-photos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(0.6rem, 1.5vw, 1.25rem); max-width: var(--container); margin: clamp(2.5rem, 5vw, 3.5rem) auto 0; }
+.cl-hero-photos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: start; gap: clamp(0.6rem, 1.5vw, 1.25rem); max-width: var(--container); margin: clamp(2.5rem, 5vw, 3.5rem) auto 0; }
 .cl-hero-photos > div { overflow: hidden; background: var(--paper-300); }
 .cl-hero-photos img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
-.cl-hero-photos > div:nth-child(even) { margin-top: clamp(1rem, 3vw, 2.5rem); }
 .cl-section-head > div > p:first-child { max-width: 30rem; color: var(--text-muted); }
 .cl-dark .cl-section-head > div > p:first-child { color: var(--paper-300); }
 .cl-section-price { max-width: 30rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.9rem; color: var(--text-muted); }
