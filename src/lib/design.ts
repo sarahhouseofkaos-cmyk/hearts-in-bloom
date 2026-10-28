@@ -9,6 +9,8 @@ export type DesignSelection = {
   styling: StylingLevel | ''
   coverage: string
   seating: Seating | ''
+  /** Optional throne chair style, e.g. "Gothic black". */
+  throneStyle: string
   coordinating: YesNo | ''
   moment: string
 }
@@ -27,6 +29,7 @@ export const emptyDesign: DesignSelection = {
   styling: '',
   coverage: '',
   seating: '',
+  throneStyle: '',
   coordinating: '',
   moment: '',
 }
@@ -100,7 +103,7 @@ export function createDesignSummary(selection: DesignSelection, lookName: string
     single: 'One throne chair',
     pair: 'A pair of throne chairs',
     '': 'Seating to be discussed',
-  }[selection.seating]
+  }[selection.seating] + (selection.seating && selection.seating !== 'none' && selection.throneStyle ? ` (${selection.throneStyle})` : '')
   const atmosphere = selection.atmosphere === 'dark' ? 'Dark Romance' : 'Romantic'
   const coordinating = selection.coordinating === 'yes' ? 'Coordinating styling included in my ideas' : 'No coordinating styling selected'
   return `My Design your heart choices: ${lookName} (${atmosphere}); ${styling}; ${selection.coverage}; ${seating}; ${selection.moment}; ${coordinating}. Suggested starting point: ${recommendation.name} — ${recommendation.price}. I’d like Sarah to advise on the final design and quotation.`
