@@ -35,6 +35,8 @@ The following images were supplied directly by Hearts in Bloom for this redesign
 | `arch-pink-hydrangea.webp` | supplied October 2026 |
 | `arch-white-hydrangea.webp` | supplied October 2026 |
 | `arch-candlelit-blush.webp` | supplied October 2026 |
+| `arch-dusky-rose.webp` | supplied October 2026 |
+| `arch-crimson-noir.webp` | supplied October 2026 |
 
 ## Other assets
 

@@ -7,6 +7,8 @@ export type CollectionItem = {
   image: string
   category: 'romantic' | 'dark'
   source: 'Hearts in Bloom' | 'Styling inspiration'
+  /** Settings (thrones, tables) rather than heart arches. */
+  kind?: 'setting'
 }
 
 export const collection: CollectionItem[] = [
@@ -91,12 +93,29 @@ export const collection: CollectionItem[] = [
     source: 'Hearts in Bloom',
   },
   {
+    slug: 'dusky-rose',
+    name: 'Dusky Rose',
+    description: 'Mauve-pink roses and dahlias on black foliage: romantic, moody and soft.',
+    image: asset('/images/arch-dusky-rose.webp'),
+    category: 'dark',
+    source: 'Hearts in Bloom',
+  },
+  {
+    slug: 'crimson-noir',
+    name: 'Crimson Noir',
+    description: 'Deep red and black roses with trailing purple foliage for real gothic drama.',
+    image: asset('/images/arch-crimson-noir.webp'),
+    category: 'dark',
+    source: 'Hearts in Bloom',
+  },
+  {
     slug: 'gothic-throne',
     name: 'Gothic Throne',
     description: 'Ornate black throne seating with carved detail for a dramatic, regal setting.',
     image: asset('/images/gothic-throne-detail.webp'),
     category: 'dark',
     source: 'Hearts in Bloom',
+    kind: 'setting',
   },
   {
     slug: 'candlelit-gothic',
@@ -105,6 +124,7 @@ export const collection: CollectionItem[] = [
     image: asset('/images/gothic-fireplace.webp'),
     category: 'dark',
     source: 'Hearts in Bloom',
+    kind: 'setting',
   },
 ]
 
