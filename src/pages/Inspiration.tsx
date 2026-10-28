@@ -20,9 +20,9 @@ export default function Inspiration() {
       </section>
 
       <nav className="guide-nav section-pad" aria-label="Inspiration guides">
-        {guides.map((guide, index) => (
+        {guides.map((guide) => (
           <a href={`#${guide.id}`} key={guide.id}>
-            <span>0{index + 1}</span><div><small>{guide.category}</small><strong>{guide.title}</strong></div><ArrowDown size={18} />
+            <div><small>{guide.category}</small><strong>{guide.title}</strong></div><ArrowDown size={18} />
           </a>
         ))}
       </nav>

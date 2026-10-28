@@ -109,10 +109,10 @@ export const collection: CollectionItem[] = [
 ]
 
 export const packages = [
-  { name: 'The Classic', price: 'From £400', description: 'Pre-dressed heart arch with local delivery and set-up.', detail: 'A beautiful focal point, simply done.' },
-  { name: 'The Ceremony', price: 'From £550', description: 'Pre-dressed heart arch with a pair of throne chairs.', detail: 'For vows, portraits and your sweetheart table.' },
-  { name: 'The Statement', price: 'From £650', description: 'Higher-end styled heart arch with a pair of throne chairs.', detail: 'A fuller, more bespoke floral arrangement.' },
-  { name: 'The Full Look', price: 'From £750', description: 'Higher-end styled arch, throne chairs and coordinating styling.', detail: 'A cohesive setting with the finishing details included.' },
+  { name: 'The Classic', slug: 'the-classic', price: 'From £400', description: 'Pre-dressed heart arch with local delivery and set-up.', detail: 'A beautiful focal point, simply done.', arch: 'Pre-dressed silk', chairs: 'Add a pair for £300', coordinating: 'Add from £75', bestFor: 'A single, beautiful focal point' },
+  { name: 'The Ceremony', slug: 'the-ceremony', price: 'From £550', description: 'Pre-dressed heart arch with a pair of throne chairs.', detail: 'For vows, portraits and your sweetheart table.', arch: 'Pre-dressed silk', chairs: 'Pair included', coordinating: 'Add from £75', bestFor: 'Vows, portraits and sweetheart tables' },
+  { name: 'The Statement', slug: 'the-statement', price: 'From £650', description: 'Higher-end styled heart arch with a pair of throne chairs.', detail: 'A fuller, more bespoke floral arrangement.', arch: 'Higher-end bespoke', chairs: 'Pair included', coordinating: 'Add from £75', bestFor: 'A fuller floral statement' },
+  { name: 'The Full Look', slug: 'the-full-look', price: 'From £750', description: 'Higher-end styled arch, throne chairs and coordinating styling.', detail: 'A cohesive setting with the finishing details included.', arch: 'Higher-end bespoke', chairs: 'Pair included', coordinating: 'Included', bestFor: 'A cohesive, fully finished setting' },
 ]
 
 export const individualPrices = [

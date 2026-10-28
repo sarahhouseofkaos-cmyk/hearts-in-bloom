@@ -15,7 +15,7 @@ function walk(dir) {
   })
 }
 
-const routes = ['collection', 'dark-romance', 'pricing', 'about', 'philosophy', 'inspiration', 'enquire', 'booking-guide', 'areas', 'planners', 'terms', 'privacy', 'cookies']
+const routes = ['collection', 'dark-romance', 'design-your-heart', 'pricing', 'about', 'philosophy', 'inspiration', 'enquire', 'booking-guide', 'areas', 'planners', 'terms', 'privacy', 'cookies']
 for (const page of ['index.html', '404.html', ...routes.map((r) => `${r}/index.html`)]) {
   if (!existsSync(join(dist, page))) fail(`Missing ${page}`)
 }
@@ -77,6 +77,7 @@ const prerendered = {
   'dark-romance/index.html': ['deeper tones.', 'Nocturnal Wedding Collection', 'Dark Romance Collection | Hearts in Bloom'],
   'about/index.html': ['My story', 'About Sarah | Hearts in Bloom'],
   'enquire/index.html': ['Tell us about'],
+  'design-your-heart/index.html': ['your heart.', 'Design Your Heart | Hearts in Bloom'],
 }
 for (const [page, needles] of Object.entries(prerendered)) {
   const file = join(dist, page)

@@ -41,7 +41,13 @@ export default function About() {
         <p>Free delivery, set-up and collection within approximately 40 miles. Planning a little further afield? Ask for a tailored travel quotation.</p>
         <Link to="/enquire" className="text-link">Tell me about your venue <ArrowRight size={16} /></Link>
       </section>
-      <EnquiryBand />
+      <EnquiryBand
+        eyebrow="From your ideas to a personal proposal"
+        title={<>Tell Sarah about<br />your day.</>}
+        copy="Share your date, venue and the atmosphere you are imagining. Every enquiry comes directly to Sarah and is answered personally."
+        label="Tell Sarah about your day"
+        to="/enquire"
+      />
     </>
   )
 }

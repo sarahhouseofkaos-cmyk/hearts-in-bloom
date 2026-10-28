@@ -30,6 +30,7 @@ if (!existsSync(serverEntry)) {
 export const routes = [
   'collection',
   'dark-romance',
+  'design-your-heart',
   'pricing',
   'about',
   'philosophy',

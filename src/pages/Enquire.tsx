@@ -6,6 +6,18 @@ import { PageMeta } from '../components/Layout'
 import { enquiryForm } from '../enquiryConfig'
 import { EnquiryError, MESSAGE_MAX_LENGTH, isFormConfigured, submitEnquiry, todayIso } from '../lib/enquiry'
 
+const serviceOptions = [
+  'Heart arch (undressed)',
+  'Heart arch with artificial flowers',
+  'Heart arch with fresh flowers',
+  'Throne chairs',
+  'Heart arch + throne chairs package',
+  'Coordinating styling',
+  'Other / not sure yet',
+]
+
+const coverageOptions = ['Top half only', 'Fuller top', 'Full arch']
+
 export default function Enquire() {
   const [params] = useSearchParams()
   const [reference, setReference] = useState('')
@@ -16,6 +28,9 @@ export default function Enquire() {
   const formReady = isFormConfigured(enquiryForm)
   const requestedStyle = params.get('style')
   const requestedPackage = params.get('package')
+  const requestedService = params.get('service')
+  const requestedCoverage = params.get('coverage')
+  const designSummary = params.get('design')
   const styleName = collection.find((item) => item.slug === requestedStyle)?.name ?? (requestedStyle === 'dark-romance' ? 'Dark Romance / not sure yet' : '')
   const packageName = requestedPackage ? requestedPackage.split('-').map((word) => word === 'the' ? 'The' : word[0].toUpperCase() + word.slice(1)).join(' ') : ''
   const minimumDate = todayIso()
@@ -25,10 +40,11 @@ export default function Enquire() {
   }, [reference])
 
   const defaultService = useMemo(() => {
+    if (requestedService && serviceOptions.includes(requestedService)) return requestedService
     if (requestedPackage) return 'Heart arch + throne chairs package'
     if (requestedStyle === 'dark-romance' || collection.some((item) => item.slug === requestedStyle)) return 'Heart arch with artificial flowers'
     return ''
-  }, [requestedPackage, requestedStyle])
+  }, [requestedPackage, requestedService, requestedStyle])
 
   async function sendEnquiry(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -112,13 +128,7 @@ export default function Enquire() {
               <label>What are you interested in? *
                 <select name="service" required defaultValue={defaultService}>
                   <option value="" disabled>Please select</option>
-                  <option>Heart arch (undressed)</option>
-                  <option>Heart arch with artificial flowers</option>
-                  <option>Heart arch with fresh flowers</option>
-                  <option>Throne chairs</option>
-                  <option>Heart arch + throne chairs package</option>
-                  <option>Coordinating styling</option>
-                  <option>Other / not sure yet</option>
+                  {serviceOptions.map((option) => <option key={option}>{option}</option>)}
                 </select>
               </label>
               <div className="form-grid two-col">
@@ -131,16 +141,15 @@ export default function Enquire() {
                   </select>
                 </label>
                 <label>Floral coverage
-                  <select name="coverage" defaultValue="">
+                  <select name="coverage" defaultValue={requestedCoverage && coverageOptions.includes(requestedCoverage) ? requestedCoverage : ''}>
                     <option value="">Not sure yet</option>
-                    <option>Top half only</option>
-                    <option>Fuller top</option>
-                    <option>Full arch</option>
+                    {coverageOptions.map((option) => <option key={option}>{option}</option>)}
                   </select>
                 </label>
               </div>
               {requestedPackage && <label>Selected package<input name="packageName" value={packageName} readOnly /></label>}
-              <label>Your vision<textarea name="message" rows={5} maxLength={MESSAGE_MAX_LENGTH} placeholder="Tell us about your colours, atmosphere, timings, venue access or anything else that matters to you." /></label>
+              {designSummary && <p className="design-enquiry-note">Your Design your heart choices have been added below. You can edit the summary or add timings, access details and anything else that matters to you.</p>}
+              <label>Your vision<textarea name="message" rows={designSummary ? 8 : 5} maxLength={MESSAGE_MAX_LENGTH} defaultValue={designSummary ?? ''} placeholder="Tell us about your colours, atmosphere, timings, venue access or anything else that matters to you." /></label>
               <label className="form-hp" aria-hidden="true">Website<input name="website" type="text" tabIndex={-1} autoComplete="off" /></label>
               <label className="consent-field"><input name="consent" type="checkbox" required /><span>I’m happy for Hearts in Bloom to use these details to respond to my enquiry, as explained in the <Link to="/privacy">Privacy Policy</Link>. This does not sign me up to marketing emails. *</span></label>
               <p className="form-note">Your enquiry is sent securely to Hearts in Bloom through MailerLite, the service we use to receive and keep track of enquiries. Your email app does not need to open, and sending an enquiry does not subscribe you to any mailing list.</p>
