@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Marcellus&family=Playfair+Display:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Karla:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -17,6 +17,11 @@
   --night-900: oklch(24.5% 0.014 52);
   --night-800: oklch(29% 0.017 52);
   --light-100: oklch(97% 0.012 72);
+  --plum-950: oklch(24.1% 0.024 316.7);
+  --plum-800: oklch(36.4% 0.052 321.2);
+  --plum-200: oklch(80.1% 0.034 322.8);
+  --oxblood-700: oklch(38.1% 0.078 9.9);
+  --forest-900: oklch(34% 0.029 167.9);
 
   /* Semantic palette */
   --background: var(--paper-100);
@@ -30,9 +35,8 @@
   --ring: var(--clay-500);
 
   /* Type and layout */
-  --font-display: 'Marcellus', 'Iowan Old Style', 'Times New Roman', serif;
-  --font-hero: 'Playfair Display', 'Didot', 'Bodoni 72', 'Times New Roman', serif;
-  --font-body: 'Jost', 'Avenir Next', 'Trebuchet MS', sans-serif;
+  --font-display: 'Fraunces', 'Iowan Old Style', 'Times New Roman', serif;
+  --font-body: 'Karla', 'Avenir Next', 'Trebuchet MS', sans-serif;
   --container: 82rem;
   --gutter: clamp(1.25rem, 4vw, 4.5rem);
   --section-space: clamp(5rem, 10vw, 9rem);

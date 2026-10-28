@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState, type ReactNode } from 'react'
+import SignatureThread from './SignatureThread'
 import { Link, NavLink, useLocation } from 'react-router'
 import * as Dialog from '@radix-ui/react-dialog'
-import { ArrowRight, Facebook, Instagram, Menu, X } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Facebook, Instagram, Menu, X } from 'lucide-react'
 import Logo, { HeartMark } from './Logo'
 import { email, socialLinks } from '../data'
 import { HeadContext } from '../head'
@@ -9,6 +10,7 @@ import { HeadContext } from '../head'
 const nav = [
   { to: '/collection', label: 'Collection' },
   { to: '/dark-romance', label: 'Dark Romance' },
+  { to: '/design-your-heart', label: 'Design your heart' },
   { to: '/pricing', label: 'Pricing' },
   { to: '/about', label: 'About' },
   { to: '/inspiration', label: 'Inspiration' },
@@ -73,7 +75,7 @@ export function JsonLd({ id, data }: { id: string; data: object }) {
 
 function MobileCta() {
   const { pathname } = useLocation()
-  if (pathname.startsWith('/enquire')) return null
+  if (pathname.startsWith('/enquire') || pathname.startsWith('/design-your-heart')) return null
   return (
     <div className="mobile-cta">
       <Link to="/enquire" className="button button-primary">Check your date <ArrowRight size={16} /></Link>
@@ -107,7 +109,7 @@ function Header() {
             </NavLink>
           ))}
         </nav>
-        <Link to="/enquire" className="header-cta">Check your date <ArrowRight size={15} /></Link>
+        <Link to="/enquire" className="header-cta">Check your date <ArrowUpRight size={15} /></Link>
         <Dialog.Root open={open} onOpenChange={setOpen}>
           <Dialog.Trigger asChild>
             <button className="menu-button" aria-label="Open menu"><Menu size={23} /></button>
@@ -136,14 +138,30 @@ function Header() {
   )
 }
 
-export function EnquiryBand({ dark = false }: { dark?: boolean }) {
+type EnquiryBandProps = {
+  dark?: boolean
+  eyebrow?: string
+  title?: ReactNode
+  copy?: string
+  label?: string
+  to?: string
+}
+
+export function EnquiryBand({
+  dark = false,
+  eyebrow = 'Your date, your venue, your vision',
+  title = <>Let’s create the moment<br />your guests remember.</>,
+  copy = 'Tell Sarah what you have in mind. Every enquiry is answered personally, usually within 24–48 hours.',
+  label = 'Begin your enquiry',
+  to = '/enquire',
+}: EnquiryBandProps) {
   return (
     <section className={`enquiry-band ${dark ? 'enquiry-band-dark' : ''}`}>
       <HeartMark className="enquiry-heart" />
-      <p className="eyebrow">Your date, your venue, your vision</p>
-      <h2>Let’s create the moment<br />your guests remember.</h2>
-      <p>Tell Sarah what you have in mind. Every enquiry is answered personally, usually within 24–48 hours.</p>
-      <Link to="/enquire" className={`button ${dark ? 'button-light' : 'button-primary'}`}>Begin your enquiry <ArrowRight size={17} /></Link>
+      <p className="eyebrow">{eyebrow}</p>
+      <h2>{title}</h2>
+      <p>{copy}</p>
+      <Link to={to} className={`button ${dark ? 'button-light' : 'button-primary'}`}>{label} <ArrowRight size={17} /></Link>
     </section>
   )
 }
@@ -165,6 +183,7 @@ function Footer() {
           <h3>Explore</h3>
           <Link to="/collection">The collection</Link>
           <Link to="/dark-romance">Dark Romance</Link>
+          <Link to="/design-your-heart">Design your heart</Link>
           <Link to="/pricing">Packages &amp; pricing</Link>
           <Link to="/inspiration">Ideas &amp; inspiration</Link>
           <Link to="/booking-guide">Practical booking guide</Link>
@@ -194,6 +213,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <ScrollManager />
       <a href="#main-content" className="skip-link">Skip to content</a>
       <Header />
+      <SignatureThread />
       <main id="main-content">{children}</main>
       <Footer />
       <MobileCta />

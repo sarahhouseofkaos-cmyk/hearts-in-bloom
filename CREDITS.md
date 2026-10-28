@@ -15,9 +15,10 @@ The following images were supplied directly by Hearts in Bloom for this redesign
 
 | Local file | Supplied original |
 | --- | --- |
-| `hero-heart-arch.webp` | `szfKI.jpg` |
+| `hero-heart-arch.webp` | `ZQ7x0.jpg` |
 | `classic-ivory.webp` | `Heart arch style 6.jpg` |
 | `soft-blush-garden.webp` | `Heart arch style 7.jpg` |
+| `romantic-heart-arch.webp` | `Heart arch - Style 20.jpg` |
 | `lush-ivory-greenery.webp` | `rei7V.jpg` |
 | `ceremony-inspiration.webp` | `b6nD6.jpg` |
 | `throne-chairs.webp` | `DO921.jpg` |
@@ -44,4 +45,4 @@ Pexels licence: [pexels.com/license](https://www.pexels.com/license/). Pexels do
 - Floral HB monogram and favicon: supplied by Hearts in Bloom; adapted with a transparent background for the website header, footer and icons.
 - Decorative heart line illustration: custom inline SVG created for this redesign.
 - Interface icons: [Lucide](https://lucide.dev), ISC licence.
-- Marcellus and Jost: served through [Google Fonts](https://fonts.google.com); consult the individual font licences when self-hosting.
+- Fraunces and Karla: served through [Google Fonts](https://fonts.google.com); consult the individual font licences when self-hosting.

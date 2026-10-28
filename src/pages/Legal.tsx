@@ -7,7 +7,7 @@ const titles: Record<string, string> = { terms: 'Terms & Conditions', privacy: '
 
 export default function Legal() {
   const { pathname } = useLocation()
-  const type = pathname.slice(1)
+  const type = pathname.replace(/^\/+|\/+$/g, '')
   const content = legalContent[type]
   if (!content) return null
   const lines = content.split('\n').filter((line) => line.trim())

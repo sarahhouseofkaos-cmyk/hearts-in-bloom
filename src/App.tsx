@@ -4,6 +4,7 @@ import Layout from './components/Layout'
 import Home from './pages/Home'
 import Collection from './pages/Collection'
 import DarkRomance from './pages/DarkRomance'
+import DesignYourHeart from './pages/DesignYourHeart'
 import Pricing from './pages/Pricing'
 import About from './pages/About'
 import Inspiration from './pages/Inspiration'
@@ -43,6 +44,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/collection" element={<Collection />} />
         <Route path="/dark-romance" element={<DarkRomance />} />
+        <Route path="/design-your-heart" element={<DesignYourHeart />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/about" element={<About />} />
         <Route path="/philosophy" element={<About />} />

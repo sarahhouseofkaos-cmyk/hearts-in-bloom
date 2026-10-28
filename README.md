@@ -4,11 +4,12 @@ A responsive static website for [heartsinbloom.co.uk](https://heartsinbloom.co.u
 
 ## Site structure
 
-- Home
-- Collection, with Romantic and Dark Romance filters and accessible image viewing
-- Dark Romance
-- Packages, pricing and practical FAQs
-- Practical booking guide
+- Home: a warm, story-led introduction from Sarah, opening with centred text above a wide cinematic heart-arch photograph, then following the couple’s meaningful moments through alternating split-layout Romantic and Dark Romance collection rows, personal booking care and clear next steps
+- Collection, with an asymmetric editorial grid, wedding-moment pathways, combined Romantic/Dark Romance filters and accessible image viewing
+- Dark Romance, with mood guidance and package starting points
+- Design your heart: a four-step visual moodboard with a live image, palette and styling details, optional on-device saving, and a complete design summary carried into the enquiry form
+- Packages, responsive package comparison, pricing and practical FAQs
+- Practical booking guide with day-of service stages and a clear comparison of silk, higher-end bespoke and fresh-flower starting points
 - About and philosophy
 - Inspiration guides
 - Enquiry form
@@ -27,7 +28,7 @@ npm run dev        # http://localhost:3000
 ## Checks and production build
 
 ```bash
-npm test             # unit tests for the enquiry logic
+npm test             # unit tests for the enquiry and design-recommendation logic
 npm run check        # TypeScript
 npm run lint         # ESLint
 npm run build        # static site in dist/
@@ -47,6 +48,10 @@ The enquiry page posts the visitor's details straight from their browser to the 
 - The browser checks the form (name, email, a future date, venue, service, message length) and a hidden honeypot field catches simple bots. MailerLite applies its own spam protection too.
 - The reference shown after sending (`HIB-XXXXXXXX`) is created in the browser and saved in the `enquiry_reference` field.
 - If MailerLite cannot be reached, the visitor sees an error with the published email address as a fallback. While the form IDs are not set, the page shows a notice instead of a working form.
+
+Design your heart does not calculate or promise a final quote. `src/lib/design.ts` maps selections to the closest existing package or separately priced items, and `src/pages/Enquire.tsx` prefills the visitor's style, package, service, coverage and editable design summary. Its recommendation and handoff logic is covered by `src/lib/design.test.ts`.
+
+`src/moments.ts` holds the wedding-moment pathways and moodboard palette suggestions. These are styling guidance, not restrictions or additional service claims. A visitor can save a completed moodboard under the local-storage key `hearts-in-bloom-moodboard-v1`; it stays only in that browser on that device, does not sync elsewhere and is not sent to Hearts in Bloom unless the visitor sends it with an enquiry. The tool offers resume, removal and start-again actions, and storage failure does not block the enquiry journey.
 
 Relevant files:
 
@@ -122,7 +127,7 @@ Do these in order, and only once the temporary address has been fully tested:
 
 ## Privacy
 
-The privacy and cookies pages (`src/legal.ts`) describe this setup: enquiries are handled by MailerLite, the site is hosted on GitHub Pages, fonts come from Google Fonts, and no analytics or advertising cookies are used. If you add analytics, a different form provider or a different host, update those pages first.
+The privacy and cookies pages (`src/legal.ts`) describe this setup: enquiries are handled by MailerLite, the site is hosted on GitHub Pages, fonts come from Google Fonts, optional moodboards use browser-local storage rather than cookies, and no analytics or advertising cookies are used. If you add analytics, a different form provider or a different host, update those pages first.
 
 ## Images and credits
 

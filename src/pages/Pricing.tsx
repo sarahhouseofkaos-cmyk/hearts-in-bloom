@@ -1,8 +1,10 @@
 import { Link } from 'react-router'
 import * as Accordion from '@radix-ui/react-accordion'
-import { ArrowRight, Check, Plus } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Check, Plus } from 'lucide-react'
 import { faqs, individualPrices, packages } from '../data'
 import { EnquiryBand, JsonLd, PageMeta } from '../components/Layout'
+import PackageComparison from '../components/PackageComparison'
+import { asset } from '../lib/asset'
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -19,11 +21,17 @@ export default function Pricing() {
     <>
       <PageMeta title="Packages & Pricing" description="Heart arch hire from £150 and wedding packages from £400. Clear pricing, personal quotations and free local delivery from Hearts in Bloom." />
       <JsonLd id="faq-jsonld" data={faqSchema} />
-      <section className="page-hero pricing-hero">
-        <p className="eyebrow">Packages &amp; pricing</p>
-        <h1>Beautiful moments.<br /><em>Beautifully clear.</em></h1>
-        <p>Start with a package or choose individual pieces. Every final quotation is prepared personally for your celebration, venue and style.</p>
-        <div className="page-hero-note"><Check size={17} /> Local delivery, set-up and collection included</div>
+      <section className="page-hero pricing-hero lookbook-page-hero">
+        <div className="lookbook-page-copy">
+          <p className="eyebrow">Packages &amp; pricing</p>
+          <h1>Beautiful moments.<br /><em>Beautifully clear.</em></h1>
+          <p>Start with a package or choose individual pieces. Every final quotation is prepared personally for your celebration, venue and style.</p>
+          <div className="page-hero-note"><Check size={17} /> Local delivery, set-up and collection included</div>
+        </div>
+        <div className="pricing-hero-art">
+          <img src={asset('/images/styling-detail.webp')} alt="Floral detail from a Hearts in Bloom signature heart arch" />
+          <div><span>Individual arches</span><strong>From £150</strong></div>
+        </div>
       </section>
 
       <section className="packages-section section-pad">
@@ -31,17 +39,18 @@ export default function Pricing() {
           <div><p className="eyebrow">Wedding packages</p><h2>Considered combinations.</h2></div>
           <p>Pre-dressed packages use our signature silk styling. Higher-end designs include a fuller, more bespoke arrangement.</p>
         </div>
-        <div className="package-list">
-          {packages.map((item, index) => (
+        <div className="package-list editorial-package-list">
+          {packages.map((item) => (
             <article key={item.name} data-reveal>
-              <span className="package-number">0{index + 1}</span>
               <div><h3>{item.name}</h3><p>{item.description}</p><small>{item.detail}</small></div>
               <strong>{item.price}</strong>
-              <Link to={`/enquire?package=${item.name.toLowerCase().replaceAll(' ', '-')}`} aria-label={`Enquire about ${item.name}`}><ArrowRight size={20} /></Link>
+              <Link to={`/enquire?package=${item.slug}`} aria-label={`Enquire about ${item.name}`}><span>Enquire</span><ArrowUpRight size={20} /></Link>
             </article>
           ))}
         </div>
       </section>
+
+      <PackageComparison />
 
       <section className="individual-section section-pad" data-reveal>
         <div className="individual-intro">
@@ -87,7 +96,13 @@ export default function Pricing() {
           ))}
         </Accordion.Root>
       </section>
-      <EnquiryBand />
+      <EnquiryBand
+        eyebrow="A clear starting point, a personal proposal"
+        title={<>Found your combination?<br />Check your date.</>}
+        copy="Tell Sarah which package or individual pieces you are considering. Your final quotation will be prepared around your celebration and venue."
+        label="Check your date"
+        to="/enquire"
+      />
     </>
   )
 }

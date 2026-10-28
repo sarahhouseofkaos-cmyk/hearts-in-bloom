@@ -10,6 +10,19 @@ const journey = [
   { number: '05', title: 'Complete your booking', text: 'The remaining balance is due no later than 14 days before your event. Then the agreed details are ready for the day.' },
 ]
 
+const dayOfFlow = [
+  { label: 'Arrival', title: 'Access at the agreed time', text: 'The team arrives within the arrangements agreed with you and your venue, with access and parking details already planned.' },
+  { label: 'Installation', title: 'Positioned and styled', text: 'Your pieces are installed in the agreed position and the floral finishing details are carefully checked.' },
+  { label: 'Your celebration', title: 'The setting is yours to enjoy', text: 'Once installation is complete, the setting is ready for your ceremony, portraits or time at the sweetheart table.' },
+  { label: 'Collection', title: 'A quiet return', text: 'The team returns at the agreed time to collect the hired pieces, so you do not need to dismantle or move them.' },
+]
+
+const flowerGuides = [
+  { name: 'Signature silk', price: 'Pre-dressed arch · £250', best: 'A considered look with a clear starting point', text: 'Our pre-dressed floral styling is the simplest route to a romantic heart arch. Choose the look and palette direction that feels closest to your day.' },
+  { name: 'Higher-end bespoke', price: 'Styled arch + set-up · £350–£550+', best: 'A fuller shape and a more individual arrangement', text: 'A fuller, more bespoke arrangement gives greater scope around coverage, floral density and the overall shape of your setting.' },
+  { name: 'Fresh flowers', price: 'Bespoke arch · £750–£2,000+', best: 'Seasonal flowers designed individually', text: 'Fresh-flower designs are quoted around your chosen flowers, coverage and season. A particular stem may need an equal-quality substitution.' },
+]
+
 export default function BookingGuide() {
   return (
     <>
@@ -33,6 +46,22 @@ export default function BookingGuide() {
             </article>
           ))}
         </div>
+      </section>
+
+      <section className="day-of-section section-pad">
+        <div className="section-heading horizontal-heading">
+          <div><p className="eyebrow">What happens on the day</p><h2>Quietly handled,<br /><em>from arrival to collection.</em></h2></div>
+          <p>No fixed script and no last-minute guesswork. The timing and access details are agreed around your venue and celebration.</p>
+        </div>
+        <ol className="day-of-flow">
+          {dayOfFlow.map((item, index) => (
+            <li key={item.label} data-reveal>
+              <span>0{index + 1} · {item.label}</span>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section className="booking-detail-grid section-pad">
@@ -86,6 +115,24 @@ export default function BookingGuide() {
         </article>
       </section>
 
+      <section className="flower-guide section-pad">
+        <div className="flower-guide-intro">
+          <p className="eyebrow">Flowers, explained simply</p>
+          <h2>Which finish feels<br /><em>right for your day?</em></h2>
+          <p>You do not need to know the technical details before enquiring. Start with the look and level of styling you prefer; Sarah will confirm what suits your venue, date and design.</p>
+          <Link to="/design-your-heart" className="text-link">Compare them in your moodboard <ArrowRight size={16} /></Link>
+        </div>
+        <div className="flower-guide-list">
+          {flowerGuides.map((item) => (
+            <article key={item.name} data-reveal>
+              <div><h3>{item.name}</h3><strong>{item.price}</strong></div>
+              <p className="flower-guide-best">{item.best}</p>
+              <p>{item.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section className="changes-section section-pad" data-reveal>
         <div className="changes-intro">
           <p className="eyebrow">If your plans change</p>
@@ -101,12 +148,13 @@ export default function BookingGuide() {
         </div>
       </section>
 
-      <section className="booking-questions section-pad">
-        <div><p className="eyebrow">Still planning the details?</p><h2>Bring us your questions.</h2></div>
-        <p>You do not need to have every answer before getting in touch. Share what you know, and Sarah will help you work through the practical details.</p>
-        <Link to="/enquire" className="button button-primary">Check your date <ArrowRight size={17} /></Link>
-      </section>
-      <EnquiryBand />
+      <EnquiryBand
+        eyebrow="Still planning the details?"
+        title={<>Bring us your questions.<br />Keep the day feeling calm.</>}
+        copy="You do not need to have every answer before getting in touch. Share what you know, and Sarah will help you work through the practical details."
+        label="Check your date"
+        to="/enquire"
+      />
     </>
   )
 }
