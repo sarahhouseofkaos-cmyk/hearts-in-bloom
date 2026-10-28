@@ -23,7 +23,7 @@ const sections = [
   },
 ]
 
-const heroPhotos = ['/images/classic-ivory.webp', '/images/soft-blush-garden.webp', '/images/midnight-plum.webp', '/images/gothic-sweetheart-table.webp']
+const heroPhotos = ['/images/lush-ivory-greenery.webp', '/images/soft-blush-garden.webp', '/images/midnight-plum.webp', '/images/gothic-sweetheart-table.webp']
 
 export default function Collection() {
   const [selected, setSelected] = useState<CollectionItem | null>(null)
