@@ -72,7 +72,7 @@ if (!existsSync(join(dist, 'images', 'hero-heart-arch.webp'))) fail('Images were
 // Every page must be pre-rendered: its text and its own title must be in the
 // HTML file itself, not only added later by JavaScript.
 const prerendered = {
-  'index.html': ['The quiet heart', 'Wedding Styling &amp; Luxury Hire in Newcastle upon Tyne | Hearts in Bloom'],
+  'index.html': ['A beautiful setting', 'Wedding Styling &amp; Luxury Hire in Newcastle upon Tyne | Hearts in Bloom'],
   'pricing/index.html': ['Considered combinations.', 'Packages &amp; Pricing | Hearts in Bloom', 'FAQPage'],
   'dark-romance/index.html': ['deeper tones.', 'Nocturnal Wedding Collection', 'Dark Romance Collection | Hearts in Bloom'],
   'about/index.html': ['My story', 'About Sarah | Hearts in Bloom'],
