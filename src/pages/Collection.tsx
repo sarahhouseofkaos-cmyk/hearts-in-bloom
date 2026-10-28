@@ -20,6 +20,10 @@ export default function Collection() {
     const momentMatches = moment === 'all' || lookMoments[item.slug]?.includes(moment)
     return atmosphereMatches && momentMatches
   })
+  const groups = [
+    { key: 'romantic', title: 'Romantic', copy: 'Ivory, blush, greenery and soft natural textures.' },
+    { key: 'dark', title: 'Dark Romance', copy: 'Deep florals, jewel tones and gothic seating.' },
+  ].map((group) => ({ ...group, items: visible.filter((item) => item.category === group.key) })).filter((group) => group.items.length > 0)
 
   return (
     <>
@@ -29,7 +33,7 @@ export default function Collection() {
           <p className="eyebrow">The signature collection</p>
           <h1>Find the shape<br />of <em>your romance.</em></h1>
           <p>Begin with the moment you want to frame. From the promises to the portraits, discover a look that belongs in your day.</p>
-          <a href="#collection-moments" className="text-link">Start with your moment <ArrowRight size={16} /></a>
+          <a href="#collection-moments" className="text-link">Browse the looks <ArrowRight size={16} /></a>
         </div>
         <div className="collection-hero-art" aria-hidden="true">
           <div><img src={asset('/images/soft-blush-garden.webp')} alt="" /></div>
@@ -37,55 +41,55 @@ export default function Collection() {
         </div>
       </section>
 
-      <section className="collection-section section-pad" id="collection-looks">
-        <div className="moment-pathways" id="collection-moments">
-          <div className="moment-pathways-heading">
-            <p className="eyebrow">Where will your heart frame the day?</p>
-            <h2>{activeMoment?.title ?? 'One heart. So many meaningful moments.'}</h2>
-            <p>{activeMoment?.copy ?? 'Choose a moment for a more focused starting point. These are styling suggestions, not restrictions; Sarah will shape the final setting around your venue.'}</p>
-          </div>
-          <div className="moment-filter" role="group" aria-label="Browse collection by wedding moment">
-            <button type="button" className={moment === 'all' ? 'active' : ''} aria-pressed={moment === 'all'} onClick={() => setMoment('all')}>Every moment</button>
-            {weddingMoments.map((item) => (
-              <button type="button" key={item.slug} className={moment === item.slug ? 'active' : ''} aria-pressed={moment === item.slug} onClick={() => setMoment(item.slug)}>{item.label}</button>
-            ))}
-          </div>
-        </div>
-
-        <div className="collection-toolbar">
-          <div className="filter-group" role="group" aria-label="Filter collection by atmosphere">
+      <section className="looks section-pad" id="collection-moments">
+        <div className="looks-bar" role="group" aria-label="Filter the collection">
+          <div className="looks-tabs" role="group" aria-label="Style">
             {(['all', 'romantic', 'dark'] as Filter[]).map((value) => (
-              <button key={value} className={filter === value ? 'filter-button active' : 'filter-button'} onClick={() => setFilter(value)} aria-pressed={filter === value}>
+              <button type="button" key={value} className={filter === value ? 'active' : ''} aria-pressed={filter === value} onClick={() => setFilter(value)}>
                 {value === 'all' ? 'All styles' : value === 'romantic' ? 'Romantic' : 'Dark Romance'}
               </button>
             ))}
           </div>
-          <span aria-live="polite">{visible.length} {visible.length === 1 ? 'look' : 'looks'}</span>
+          <div className="looks-moments" role="group" aria-label="Wedding moment">
+            <span>Moment</span>
+            <button type="button" className={moment === 'all' ? 'active' : ''} aria-pressed={moment === 'all'} onClick={() => setMoment('all')}>Any</button>
+            {weddingMoments.map((item) => (
+              <button type="button" key={item.slug} className={moment === item.slug ? 'active' : ''} aria-pressed={moment === item.slug} onClick={() => setMoment(item.slug)}>{item.designLabel}</button>
+            ))}
+          </div>
         </div>
-        <p className="collection-note">Images marked “Hearts in Bloom” show our own pieces; other photography provides styling inspiration. Your final design is tailored individually.</p>
-        <div className="collection-grid lookbook-collection-grid">
-          {visible.map((item, index) => (
-            <article className={`collection-card collection-card-${index % 4}`} key={item.slug} data-reveal>
-              <button className="collection-image" onClick={() => setSelected(item)} aria-label={`View ${item.name} larger`}>
-                <img src={item.image} alt={`${item.name} wedding styling`} loading="lazy" />
-                <span className="expand-icon"><Expand size={18} /></span>
-              </button>
-              <div className="collection-card-copy">
-                <span>{item.source}</span>
-                <h2>{item.name}</h2>
-                <p>{item.description}</p>
-                <small className="collection-card-moments">Beautiful for: {lookMoments[item.slug]?.map((value) => weddingMoments.find((entry) => entry.slug === value)?.label).join(' · ')}</small>
-                <Link to={`/design-your-heart?atmosphere=${item.category}&style=${item.slug}${moment === 'all' ? '' : `&moment=${moment}`}`} className="text-link">Design with this look <ArrowUpRight size={15} /></Link>
-              </div>
-            </article>
-          ))}
-        </div>
+        {activeMoment && <p className="looks-moment-note"><strong>{activeMoment.title}</strong> {activeMoment.copy}</p>}
+
+        {groups.map((group) => (
+          <div className="looks-group" key={group.key}>
+            <div className="looks-group-heading">
+              <h2>{group.title}</h2>
+              <p>{group.copy}</p>
+            </div>
+            <div className="looks-grid">
+              {group.items.map((item) => (
+                <article className="look-card" key={item.slug}>
+                  <button type="button" className="look-image" onClick={() => setSelected(item)} aria-label={`View ${item.name} larger`}>
+                    <img src={item.image} alt={`${item.name} wedding styling`} loading="lazy" />
+                    <span className={`look-badge ${item.source === 'Hearts in Bloom' ? 'own' : ''}`}>{item.source === 'Hearts in Bloom' ? 'Hearts in Bloom' : 'Inspiration'}</span>
+                    <span className="look-expand" aria-hidden="true"><Expand size={16} /></span>
+                  </button>
+                  <h3>{item.name}</h3>
+                  <p>{item.description}</p>
+                  <Link to={`/design-your-heart?atmosphere=${item.category}&style=${item.slug}${moment === 'all' ? '' : `&moment=${moment}`}`} className="text-link">Design with this look <ArrowUpRight size={15} /></Link>
+                </article>
+              ))}
+            </div>
+          </div>
+        ))}
+
         {visible.length === 0 && (
           <div className="collection-empty" role="status">
-            <p>No look currently combines those two filters. Try another atmosphere or begin with every moment.</p>
+            <p>No look currently combines those two choices. Try another style or moment.</p>
             <button type="button" className="button button-outline" onClick={() => { setFilter('all'); setMoment('all') }}>Show the full collection</button>
           </div>
         )}
+        <p className="looks-note">Photos labelled “Hearts in Bloom” show our own pieces; “Inspiration” photos show styling ideas. Every final design is tailored to you.</p>
       </section>
 
       <section className="throne-feature" data-reveal>
