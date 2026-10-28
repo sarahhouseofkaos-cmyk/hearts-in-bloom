@@ -30,7 +30,7 @@ const thrones = [
   { name: 'The crown pair', copy: 'Our one-of-a-kind gilded pair with crown tops.', image: '/images/throne-crown.webp', alt: 'A couple seated on a unique pair of gilded crown-topped throne chairs' },
 ]
 
-const heroPhotos = ['/images/lush-ivory-greenery.webp', '/images/soft-blush-garden.webp', '/images/midnight-plum.webp', '/images/gothic-sweetheart-table.webp']
+const heroPhotos = ['/images/arch-country-house-ivory.webp', '/images/arch-pink-hydrangea.webp', '/images/midnight-plum.webp', '/images/throne-gothic-black.webp']
 
 export default function Collection() {
   const [selected, setSelected] = useState<CollectionItem | null>(null)

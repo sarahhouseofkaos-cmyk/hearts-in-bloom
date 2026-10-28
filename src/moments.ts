@@ -31,9 +31,11 @@ export const weddingMoments: {
 ]
 
 export const lookMoments: Record<string, WeddingMoment[]> = {
-  'classic-ivory': ['ceremony', 'portraits'],
-  'soft-blush-garden': ['ceremony', 'portraits', 'sweetheart'],
-  'lush-ivory-greenery': ['ceremony', 'portraits'],
+  'country-house-ivory': ['ceremony', 'portraits'],
+  'garden-blush': ['ceremony', 'portraits'],
+  'pink-hydrangea': ['ceremony', 'portraits', 'sweetheart'],
+  'white-hydrangea': ['ceremony', 'portraits'],
+  'candlelit-blush': ['ceremony', 'portraits', 'sweetheart'],
   'rose-romance': ['ceremony', 'portraits'],
   'dusty-blue-heart': ['ceremony', 'portraits'],
   'teal-noir': ['portraits', 'sweetheart'],
@@ -44,9 +46,11 @@ export const lookMoments: Record<string, WeddingMoment[]> = {
 }
 
 export const lookPalettes: Record<string, { name: string; value: string }[]> = {
-  'classic-ivory': [{ name: 'Ivory', value: '#eee9db' }, { name: 'Rose white', value: '#f7f4ec' }, { name: 'Foliage', value: '#4d5b43' }],
-  'soft-blush-garden': [{ name: 'Blush', value: '#d8aeb0' }, { name: 'Ivory', value: '#eee9db' }, { name: 'Garden green', value: '#53634b' }],
-  'lush-ivory-greenery': [{ name: 'Soft ivory', value: '#e9e6d8' }, { name: 'Eucalyptus', value: '#7d8c73' }, { name: 'Deep foliage', value: '#354738' }],
+  'country-house-ivory': [{ name: 'Ivory', value: '#eee9db' }, { name: 'Eucalyptus', value: '#7d8c73' }, { name: 'White blossom', value: '#f6f3ec' }],
+  'garden-blush': [{ name: 'Blush', value: '#e3b3b5' }, { name: 'Ivory', value: '#eee9db' }, { name: 'Eucalyptus', value: '#7d8c73' }],
+  'pink-hydrangea': [{ name: 'Hydrangea pink', value: '#e7a9bc' }, { name: 'Rose pink', value: '#d98c9f' }, { name: 'Leaf green', value: '#3f5a3a' }],
+  'white-hydrangea': [{ name: 'White', value: '#f5f3ee' }, { name: 'Ivory', value: '#eee9db' }, { name: 'Leaf green', value: '#3f5a3a' }],
+  'candlelit-blush': [{ name: 'White', value: '#f5f3ee' }, { name: 'Blush', value: '#e3b3b5' }, { name: 'Candlelight', value: '#d0ad79' }],
   'rose-romance': [{ name: 'Rose red', value: '#8e2a33' }, { name: 'Blush', value: '#e2b4b4' }, { name: 'Ivory', value: '#eee9db' }],
   'dusty-blue-heart': [{ name: 'Dusty blue', value: '#8096a6' }, { name: 'Mist', value: '#b8c3c5' }, { name: 'Muted foliage', value: '#53645d' }],
   'teal-noir': [{ name: 'Teal', value: '#245f62' }, { name: 'Deep green', value: '#243e37' }, { name: 'Noir', value: '#2e292d' }],
