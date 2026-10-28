@@ -69,6 +69,27 @@ if (endpoints.size === 0) fail('The MailerLite form endpoint is missing from the
 
 if (!existsSync(join(dist, 'images', 'hero-heart-arch.webp'))) fail('Images were not copied into dist/')
 
+// Every page must be pre-rendered: its text and its own title must be in the
+// HTML file itself, not only added later by JavaScript.
+const prerendered = {
+  'index.html': ['The quiet heart', 'Wedding Styling &amp; Luxury Hire in Newcastle upon Tyne | Hearts in Bloom'],
+  'pricing/index.html': ['Considered combinations.', 'Packages &amp; Pricing | Hearts in Bloom', 'FAQPage'],
+  'dark-romance/index.html': ['deeper tones.', 'Nocturnal Wedding Collection', 'Dark Romance Collection | Hearts in Bloom'],
+  'about/index.html': ['My story', 'About Sarah | Hearts in Bloom'],
+  'enquire/index.html': ['Tell us about'],
+}
+for (const [page, needles] of Object.entries(prerendered)) {
+  const file = join(dist, page)
+  if (!existsSync(file)) continue
+  const body = readFileSync(file, 'utf8')
+  for (const needle of needles) {
+    if (!body.includes(needle)) fail(`${page} is not pre-rendered: "${needle}" is missing from the HTML`)
+  }
+  if ((body.match(/<title>/g) || []).length !== 1) fail(`${page} should have exactly one <title>`)
+}
+const notFound = existsSync(join(dist, '404.html')) ? readFileSync(join(dist, '404.html'), 'utf8') : ''
+if (!notFound.includes('noindex')) fail('404.html should tell search engines not to index it')
+
 if (failures.length) {
   console.error(`Build verification failed (${failures.length}):`)
   for (const f of failures) console.error(` - ${f}`)

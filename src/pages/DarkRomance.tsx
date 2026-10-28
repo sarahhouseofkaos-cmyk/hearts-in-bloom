@@ -16,8 +16,8 @@ export default function DarkRomance() {
       <section className="dark-hero">
         <div className="dark-hero-copy">
           <p className="eyebrow">The Dark Romance Collection</p>
-          <h1>For the bride<br />who dreams in<br /><em>deeper tones.</em></h1>
-          <p>Rich florals, moody textures and a quietly dramatic spirit — created for gothic, alternative and darkly romantic celebrations.</p>
+          <h1>For couples<br />who dream in<br /><em>deeper tones.</em></h1>
+          <p>Rich florals, moody textures and a touch of theatre — created for gothic, alternative and darkly romantic celebrations.</p>
           <Link to="/enquire?style=dark-romance" className="button button-light">Enquire about Dark Romance <ArrowRight size={17} /></Link>
         </div>
         <div className="dark-hero-image"><img src={asset('/images/gothic-sweetheart-table.webp')} alt="Couple seated at a candlelit Gothic sweetheart table by Hearts in Bloom" /></div>
@@ -31,7 +31,7 @@ export default function DarkRomance() {
 
       <section className="dark-collection section-pad">
         <div className="section-heading horizontal-heading">
-          <div><p className="eyebrow">Six signature looks</p><h2>Choose your<br /><em>after-dark atmosphere.</em></h2></div>
+          <div><p className="eyebrow">Signature looks</p><h2>Choose your<br /><em>after-dark atmosphere.</em></h2></div>
           <p>Each look can be tailored to your venue and colour story. Select an image to view it larger.</p>
         </div>
         <div className="dark-grid">
@@ -60,6 +60,19 @@ export default function DarkRomance() {
           <li><Check size={17} /> A personal consultation and tailored quotation</li>
           <li><Check size={17} /> Free local delivery within approximately 40 miles of Newcastle</li>
         </ul>
+      </section>
+
+      <section className="dark-details nocturnal-section" data-reveal>
+        <div>
+          <p className="eyebrow">The Nocturnal Wedding Collection</p>
+          <h2>Want the whole venue<br /><em>transformed?</em></h2>
+        </div>
+        <div>
+          <p>For a fully immersive gothic wedding, Hearts in Bloom works alongside House of Kaos, Sarah&rsquo;s gothic immersive events company. Together we dress your entire venue with props and set styling, and can add costumed cast and performers to bring the world to life.</p>
+          <p>You choose the venue and caterer; we build the atmosphere around your own idea.</p>
+          <a href="http://houseofkaos.co.uk" target="_blank" rel="noreferrer" className="text-link">Visit House of Kaos <ArrowRight size={16} /></a>
+          <Link to="/enquire?style=dark-romance" className="text-link">Ask about a Nocturnal wedding <ArrowRight size={16} /></Link>
+        </div>
       </section>
       <EnquiryBand dark />
       <Lightbox item={selected} onClose={() => setSelected(null)} />
