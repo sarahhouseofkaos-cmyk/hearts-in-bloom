@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Link } from 'react-router'
 import { ArrowDown, ArrowRight, ArrowUpRight, Expand } from 'lucide-react'
 import { collection, type CollectionItem } from '../data'
@@ -23,6 +23,8 @@ const sections = [
   },
 ]
 
+const heroPhotos = ['/images/classic-ivory.webp', '/images/soft-blush-garden.webp', '/images/midnight-plum.webp', '/images/gothic-sweetheart-table.webp']
+
 export default function Collection() {
   const [selected, setSelected] = useState<CollectionItem | null>(null)
   const count = (key: 'romantic' | 'dark') => collection.filter((item) => item.category === key).length
@@ -35,6 +37,9 @@ export default function Collection() {
         <p className="eyebrow">The collection</p>
         <h1>Find the look that<br /><em>feels like yours.</em></h1>
         <p className="cl-hero-intro">Every arch is styled by hand. Browse my signature looks, then we’ll shape your favourite around your colours, your venue and your day.</p>
+        <div className="cl-hero-photos" aria-hidden="true">
+          {heroPhotos.map((src) => <div key={src}><img src={asset(src)} alt="" /></div>)}
+        </div>
         <nav className="cl-jump" aria-label="Jump to a collection">
           {sections.map((section) => (
             <a key={section.key} href={`#${section.id}`} className={`cl-jump-${section.key}`}>
@@ -46,18 +51,28 @@ export default function Collection() {
       </section>
 
       {sections.map((section) => (
-        <section key={section.key} id={section.id} className={`cl-section cl-${section.key}`}>
+        <Fragment key={section.key}>
+        {section.key === 'dark' && (
+          <aside className="cl-colours">
+            <p><strong>Don’t see your colours?</strong> Every look can be restyled in your own palette, from sage green to burnt orange.</p>
+            <Link to="/design-your-heart" className="text-link">Design your heart <ArrowUpRight size={14} /></Link>
+          </aside>
+        )}
+        <section id={section.id} className={`cl-section cl-${section.key}`}>
           <div className="cl-section-inner">
             <div className="cl-section-head">
               <p className="eyebrow">{section.eyebrow}</p>
               <h2>{section.title}</h2>
-              <p>{section.copy}</p>
+              <div>
+                <p>{section.copy}</p>
+                <p className="cl-section-price">Arches from <strong>£250</strong> pre-dressed in silk, or from <strong>£350</strong> for fuller styling.{section.key === 'dark' ? <> Throne chairs from <strong>£150</strong>.</> : ' Fresh flowers quoted individually.'}</p>
+              </div>
             </div>
             <div className="cl-grid">
               {collection.filter((item) => item.category === section.key).map((item) => (
                 <article className="cl-look" key={item.slug}>
                   <button type="button" className="cl-look-image" onClick={() => setSelected(item)} aria-label={`View ${item.name} larger`}>
-                    <img src={item.image} alt={`${item.name} heart arch styling by Hearts in Bloom`} loading="lazy" />
+                    <img src={item.image} alt={`${item.name} wedding styling by Hearts in Bloom`} loading="lazy" />
                     <span className="cl-look-expand" aria-hidden="true"><Expand size={16} /></span>
                   </button>
                   <h3>{item.name}</h3>
@@ -74,14 +89,18 @@ export default function Collection() {
             )}
           </div>
         </section>
+        </Fragment>
       ))}
 
       <section className="throne-feature" data-reveal>
-        <img src={asset('/images/throne-chairs.webp')} alt="Hearts in Bloom luxury throne chairs" loading="lazy" />
+        <div className="throne-images">
+          <figure><img src={asset('/images/throne-chairs.webp')} alt="Gold throne chairs from Hearts in Bloom" loading="lazy" /><figcaption>Gold</figcaption></figure>
+          <figure><img src={asset('/images/gothic-throne-detail.webp')} alt="Gothic black throne chair with carved detail from Hearts in Bloom" loading="lazy" /><figcaption>Gothic black</figcaption></figure>
+        </div>
         <div>
           <p className="eyebrow">Also available</p>
-          <h2>A seat worthy<br />of the moment.</h2>
-          <p>Elegant throne chairs for ceremonies, sweetheart tables and statement portraits. Available individually or as a pair, and beautiful alongside your heart arch.</p>
+          <h2>Gold or<br /><em>gothic black.</em></h2>
+          <p>Statement throne chairs for ceremonies, sweetheart tables and portraits, in elegant gold or ornate gothic black. Hire one or a pair, in either style, beautiful alongside your heart arch.</p>
           <div className="throne-price"><span>Single chair</span><strong>£150</strong></div>
           <div className="throne-price"><span>Pair of chairs</span><strong>£300</strong></div>
           <Link to="/pricing" className="text-link">See packages &amp; pricing <ArrowRight size={16} /></Link>
