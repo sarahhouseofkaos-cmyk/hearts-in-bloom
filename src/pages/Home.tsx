@@ -19,7 +19,10 @@ export default function Home() {
           </div>
         </div>
         <div className="hero-visual">
-          <img src={asset('/images/hero-heart-arch.webp')} alt="A couple beneath a romantic floral heart arch" fetchPriority="high" />
+          <picture>
+            <source media="(min-width: 901px)" srcSet={asset('/images/ceremony-inspiration.webp')} />
+            <img src={asset('/images/hero-heart-arch.webp')} alt="A couple embracing beneath a romantic floral heart arch" fetchPriority="high" />
+          </picture>
           <div className="hero-caption"><span>Arches from £150</span><span>Free delivery within ~40 miles</span><span>Replies in 24–48 hours</span></div>
         </div>
       </section>
@@ -69,7 +72,7 @@ export default function Home() {
         <div className="editorial-gallery">
           <figure className="gallery-tall"><img src={asset('/images/throne-chairs.webp')} alt="Hearts in Bloom gold throne chairs" loading="lazy" /><figcaption>Statement seating</figcaption></figure>
           <figure><img src={asset('/images/classic-ivory.webp')} alt="Ivory floral detail from a Hearts in Bloom heart arch" loading="lazy" /><figcaption>Considered details</figcaption></figure>
-          <figure><img src={asset('/images/ceremony-inspiration.webp')} alt="Couple framed by a Hearts in Bloom floral heart arch" loading="lazy" /><figcaption>Your moment, framed</figcaption></figure>
+          <figure><img src={asset('/images/hero-heart-arch.webp')} alt="Couple framed by a Hearts in Bloom floral heart arch" loading="lazy" /><figcaption>Your moment, framed</figcaption></figure>
         </div>
       </section>
 
