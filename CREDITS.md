@@ -27,6 +27,9 @@ The following images were supplied directly by Hearts in Bloom for this redesign
 | `gothic-fireplace.webp` | `Designer.jpeg` |
 | `gothic-throne-portrait.webp` | `Hearts in Bloom-Gothic Throne Chairs 2.png` |
 | `gothic-sweetheart-table.webp` | `b1kj3.jpg` |
+| `throne-gothic-black.webp` | supplied October 2026 |
+| `throne-white.webp` | supplied October 2026 |
+| `throne-crown.webp` | supplied October 2026 |
 
 ## Other assets
 
