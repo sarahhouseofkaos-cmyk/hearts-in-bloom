@@ -23,6 +23,13 @@ const sections = [
   },
 ]
 
+const thrones = [
+  { name: 'Gold', copy: 'Classic carved gold, warm and regal.', image: '/images/throne-chairs.webp', alt: 'A couple seated on gold throne chairs from Hearts in Bloom' },
+  { name: 'Gothic black', copy: 'Ornate black thrones for Dark Romance settings.', image: '/images/throne-gothic-black.webp', alt: 'A pair of ornate gothic black throne chairs behind a candlelit sweetheart table' },
+  { name: 'White', copy: 'Carved ivory-white thrones, light and elegant.', image: '/images/throne-white.webp', alt: 'A couple seated on carved white throne chairs outside a country house' },
+  { name: 'The crown pair', copy: 'Our one-of-a-kind gilded pair with crown tops.', image: '/images/throne-crown.webp', alt: 'A couple seated on a unique pair of gilded crown-topped throne chairs' },
+]
+
 const heroPhotos = ['/images/lush-ivory-greenery.webp', '/images/soft-blush-garden.webp', '/images/midnight-plum.webp', '/images/gothic-sweetheart-table.webp']
 
 export default function Collection() {
@@ -92,18 +99,26 @@ export default function Collection() {
         </Fragment>
       ))}
 
-      <section className="throne-feature" data-reveal>
-        <div className="throne-images">
-          <figure><img src={asset('/images/throne-chairs.webp')} alt="Gold throne chairs from Hearts in Bloom" loading="lazy" /><figcaption>Gold</figcaption></figure>
-          <figure><img src={asset('/images/gothic-throne-detail.webp')} alt="Gothic black throne chair with carved detail from Hearts in Bloom" loading="lazy" /><figcaption>Gothic black</figcaption></figure>
-        </div>
-        <div>
-          <p className="eyebrow">Also available</p>
-          <h2>Gold or<br /><em>gothic black.</em></h2>
-          <p>Statement throne chairs for ceremonies, sweetheart tables and portraits, in elegant gold or ornate gothic black. Hire one or a pair, in either style, beautiful alongside your heart arch.</p>
-          <div className="throne-price"><span>Single chair</span><strong>£150</strong></div>
-          <div className="throne-price"><span>Pair of chairs</span><strong>£300</strong></div>
-          <Link to="/pricing" className="text-link">See packages &amp; pricing <ArrowRight size={16} /></Link>
+      <section className="thrones section-pad" data-reveal>
+        <div className="thrones-inner">
+          <div className="thrones-head">
+            <p className="eyebrow">Statement seating</p>
+            <h2>A throne for<br /><em>every love story.</em></h2>
+            <div>
+              <p>Four styles of throne chair for your ceremony, sweetheart table and portraits, from classic gold to ornate gothic black. Beautiful on their own or alongside your heart arch.</p>
+              <p className="thrones-price">Throne chairs from <strong>£150</strong> each, or <strong>£300</strong> a pair.</p>
+            </div>
+          </div>
+          <ul className="thrones-grid">
+            {thrones.map((throne) => (
+              <li key={throne.name}>
+                <div className="thrones-image"><img src={asset(throne.image)} alt={throne.alt} loading="lazy" /></div>
+                <h3>{throne.name}</h3>
+                <p>{throne.copy}</p>
+              </li>
+            ))}
+          </ul>
+          <Link to="/enquire" className="button button-primary">Check your date <ArrowRight size={16} /></Link>
         </div>
       </section>
       <EnquiryBand
