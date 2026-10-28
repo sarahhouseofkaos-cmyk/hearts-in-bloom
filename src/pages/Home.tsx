@@ -5,6 +5,12 @@ import { RealWeddings, Testimonials } from '../components/Proof'
 import { asset } from '../lib/asset'
 import { packages } from '../data'
 
+const pieces = [
+  { name: 'Signature heart arch', copy: 'The heart of the setting: undressed, silk-styled, or bespoke fresh flowers.', price: 'From £150', image: '/images/lush-ivory-greenery.webp', alt: 'Ivory rose and hydrangea heart arch with cascading greenery' },
+  { name: 'Throne chairs', copy: 'Statement seating for your vows, portraits and sweetheart table.', price: 'From £150 each', image: '/images/throne-chairs.webp', alt: 'A couple seated on gold throne chairs from Hearts in Bloom' },
+  { name: 'Finishing touches', copy: 'Coordinating styling — candles, florals and details that tie it all together.', price: 'From £75', image: '/images/gothic-sweetheart-table.webp', alt: 'Candlelit sweetheart table styled with dark florals and throne seating' },
+]
+
 export default function Home() {
   return (
     <>
@@ -19,6 +25,7 @@ export default function Home() {
             <Link to="/enquire" className="button button-primary">Check your date <ArrowRight size={17} /></Link>
             <Link to="/design-your-heart" className="text-link">Design your heart <ArrowUpRight size={16} /></Link>
           </div>
+          <p className="story-hero-booking">Now taking bookings for 2027 weddings</p>
         </div>
         <div className="story-hero-photo">
           <img src={asset('/images/hero-heart-arch.webp')} alt="A couple sharing a moment beneath a Hearts in Bloom floral heart arch" fetchPriority="high" />
@@ -96,6 +103,24 @@ export default function Home() {
           <li><span>02</span><div><h3>Receive your personal proposal</h3><p>I’ll prepare a styling direction and clear quotation around your celebration.</p></div></li>
           <li><span>03</span><div><h3>Be present for every moment</h3><p>We deliver, install and collect, with the practical details taken care of.</p></div></li>
         </ol>
+      </section>
+
+      <section className="home-pieces section-pad" data-reveal>
+        <div className="home-pieces-heading">
+          <p className="eyebrow">Pieces you can hire</p>
+          <h2>Choose one piece,<br /><em>or the whole setting.</em></h2>
+        </div>
+        <ul className="home-pieces-list">
+          {pieces.map((piece) => (
+            <li key={piece.name}>
+              <div className="home-piece-image"><img src={asset(piece.image)} alt={piece.alt} loading="lazy" /></div>
+              <h3>{piece.name}</h3>
+              <p>{piece.copy}</p>
+              <strong>{piece.price}</strong>
+            </li>
+          ))}
+        </ul>
+        <Link to="/pricing" className="text-link">See every piece &amp; price <ArrowRight size={16} /></Link>
       </section>
 
       <section className="home-packages" data-reveal>
