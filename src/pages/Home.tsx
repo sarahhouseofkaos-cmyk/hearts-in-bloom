@@ -1,8 +1,9 @@
 import { Link } from 'react-router'
-import { ArrowDown, ArrowRight, ArrowUpRight } from 'lucide-react'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { EnquiryBand, PageMeta } from '../components/Layout'
 import { RealWeddings, Testimonials } from '../components/Proof'
 import { asset } from '../lib/asset'
+import { packages } from '../data'
 
 export default function Home() {
   return (
@@ -15,39 +16,14 @@ export default function Home() {
           <h1>A beautiful setting<br />for <em>your love story.</em></h1>
           <p className="story-hero-intro">Hello, I’m Sarah. I create hand-styled heart arches and statement settings for couples who want their wedding to feel personal, romantic and entirely their own.</p>
           <div className="hero-actions">
-            <Link to="/about" className="button button-primary">Discover our story <ArrowRight size={17} /></Link>
-            <Link to="/collection" className="text-link">Explore the collection <ArrowUpRight size={16} /></Link>
+            <Link to="/enquire" className="button button-primary">Check your date <ArrowRight size={17} /></Link>
+            <Link to="/design-your-heart" className="text-link">Design your heart <ArrowUpRight size={16} /></Link>
           </div>
         </div>
         <div className="story-hero-photo">
           <img src={asset('/images/hero-heart-arch.webp')} alt="A couple sharing a moment beneath a Hearts in Bloom floral heart arch" fetchPriority="high" />
-          <div className="story-hero-footer">
-            <p className="story-hero-caption"><span>Hearts in Bloom</span><em>Your moment, beautifully framed</em></p>
-            <div className="story-hero-note">
-              <span>Styled by hand, just for you</span>
-              <span>Delivery, set-up and collection taken care of</span>
-            </div>
-            <a href="#your-story" className="story-hero-scroll">Follow our story <ArrowDown size={16} /></a>
-          </div>
         </div>
-      </section>
-
-      <section className="story-opening section-pad" id="your-story" data-reveal>
-        <div className="story-opening-copy">
-          <p className="eyebrow">It begins with your moment</p>
-          <h2>Your day is made of<br /><em>little moments.</em></h2>
-        </div>
-        <div className="story-opening-text">
-          <p>The glance before the vows. The walk back down the aisle. The photographs you’ll return to for years.</p>
-          <p>Hearts in Bloom creates settings that belong in those moments — thoughtfully styled around your colours, your venue and the atmosphere you want to share.</p>
-        </div>
-        <figure className="story-opening-photo">
-          <div className="story-opening-visual">
-            <img src={asset('/images/ceremony-inspiration.webp')} alt="A couple embracing inside a floral heart arch during their wedding celebration" loading="lazy" />
-          </div>
-          <figcaption>Not simply a backdrop, but the frame around a promise.</figcaption>
-          <p className="story-opening-aside">Romantic, considered and entirely personal.</p>
-        </figure>
+        <p className="story-hero-strapline">Styled by hand · Delivery, set-up and collection included within about 40 miles of Newcastle</p>
       </section>
 
       <section className="story-sarah" data-reveal>
@@ -97,25 +73,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="story-process section-pad" data-reveal>
-        <div className="story-process-intro">
-          <p className="eyebrow">From our first conversation to your final photograph</p>
-          <h2>Your story,<br /><em>taken care of.</em></h2>
-          <p>You do not need to know exactly what you want yet. Bring the ideas you have, and we will shape the setting together.</p>
-          <Link to="/booking-guide" className="text-link">Read the practical booking guide <ArrowRight size={16} /></Link>
-        </div>
-        <ol className="story-process-list">
-          <li><span>01</span><div><h3>Tell me what you’re imagining</h3><p>Share your date, venue, favourite pieces and the feeling you want your day to hold.</p></div></li>
-          <li><span>02</span><div><h3>Receive your personal proposal</h3><p>I’ll prepare a styling direction and clear quotation around your celebration.</p></div></li>
-          <li><span>03</span><div><h3>Be present for every moment</h3><p>We deliver, install and collect, with the practical details taken care of.</p></div></li>
-        </ol>
-      </section>
-
-      <section className="story-pricing">
-        <p><span>Heart arches from <strong>£150</strong></span><span>Packages from <strong>£400</strong></span><span>Every quotation prepared personally</span></p>
-        <Link to="/pricing" className="text-link">Explore packages &amp; pricing <ArrowRight size={16} /></Link>
-      </section>
-
       <section className="story-design" data-reveal>
         <div>
           <p className="eyebrow">A gentle place to begin</p>
@@ -126,6 +83,37 @@ export default function Home() {
           <Link to="/design-your-heart" className="button button-primary">Design your heart <ArrowRight size={17} /></Link>
           <small>A helpful starting point, not a final quotation or live availability.</small>
         </div>
+      </section>
+
+      <section className="story-process section-pad" data-reveal>
+        <div className="story-process-intro">
+          <p className="eyebrow">From our first conversation to your final photograph</p>
+          <h2>Your story,<br /><em>taken care of.</em></h2>
+          <p>You do not need to know exactly what you want yet. Bring the ideas you have, and we will shape the setting together.</p>
+        </div>
+        <ol className="story-process-list">
+          <li><span>01</span><div><h3>Tell me what you’re imagining</h3><p>Share your date, venue, favourite pieces and the feeling you want your day to hold.</p></div></li>
+          <li><span>02</span><div><h3>Receive your personal proposal</h3><p>I’ll prepare a styling direction and clear quotation around your celebration.</p></div></li>
+          <li><span>03</span><div><h3>Be present for every moment</h3><p>We deliver, install and collect, with the practical details taken care of.</p></div></li>
+        </ol>
+      </section>
+
+      <section className="home-packages" data-reveal>
+        <div className="home-packages-heading">
+          <p className="eyebrow">Packages &amp; pricing</p>
+          <h2>Clear prices,<br /><em>personally quoted.</em></h2>
+          <p>Heart arches from £150 on their own. Every package includes delivery, set-up and collection locally.</p>
+        </div>
+        <ul className="home-package-list">
+          {packages.map((item) => (
+            <li key={item.slug}>
+              <h3>{item.name}</h3>
+              <strong>{item.price}</strong>
+              <p>{item.description}</p>
+            </li>
+          ))}
+        </ul>
+        <Link to="/pricing" className="text-link">Compare packages &amp; what’s included <ArrowRight size={16} /></Link>
       </section>
 
       <RealWeddings />
