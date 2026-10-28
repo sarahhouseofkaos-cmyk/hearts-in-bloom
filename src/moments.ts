@@ -31,6 +31,8 @@ export const weddingMoments: {
 ]
 
 export const lookMoments: Record<string, WeddingMoment[]> = {
+  'dusky-rose': ['ceremony', 'portraits', 'sweetheart'],
+  'crimson-noir': ['ceremony', 'portraits'],
   'country-house-ivory': ['ceremony', 'portraits'],
   'garden-blush': ['ceremony', 'portraits'],
   'pink-hydrangea': ['ceremony', 'portraits', 'sweetheart'],
@@ -46,6 +48,8 @@ export const lookMoments: Record<string, WeddingMoment[]> = {
 }
 
 export const lookPalettes: Record<string, { name: string; value: string }[]> = {
+  'dusky-rose': [{ name: 'Dusky pink', value: '#c98a9e' }, { name: 'Mulberry', value: '#7a2f52' }, { name: 'Black foliage', value: '#24222a' }],
+  'crimson-noir': [{ name: 'Crimson', value: '#7c1228' }, { name: 'Black rose', value: '#1f1b22' }, { name: 'Plum leaf', value: '#5b3a63' }],
   'country-house-ivory': [{ name: 'Ivory', value: '#eee9db' }, { name: 'Eucalyptus', value: '#7d8c73' }, { name: 'White blossom', value: '#f6f3ec' }],
   'garden-blush': [{ name: 'Blush', value: '#e3b3b5' }, { name: 'Ivory', value: '#eee9db' }, { name: 'Eucalyptus', value: '#7d8c73' }],
   'pink-hydrangea': [{ name: 'Hydrangea pink', value: '#e7a9bc' }, { name: 'Rose pink', value: '#d98c9f' }, { name: 'Leaf green', value: '#3f5a3a' }],

@@ -214,7 +214,8 @@ h3 { line-height: 1.2; }
 .dark-collection { max-width: var(--container); margin: 0 auto; }
 .dark-collection .section-heading > p { color: var(--paper-300); }
 .dark-collection .eyebrow, .dark-collection h2 em { color: var(--plum-200); }
-.dark-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4rem 1.5rem; }
+.dark-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4rem 1.5rem; }
+@media (max-width: 1180px) { .dark-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .dark-grid article > button { position: relative; width: 100%; padding: 0; border: 0; background: var(--plum-800); cursor: zoom-in; overflow: hidden; }
 .dark-grid article > button img { width: 100%; aspect-ratio: 4 / 4.8; object-fit: cover; transition: transform 260ms ease-out; }
 .dark-grid article > button:hover img { transform: scale(1.02); }

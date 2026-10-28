@@ -34,7 +34,7 @@ const heroPhotos = ['/images/arch-country-house-ivory.webp', '/images/arch-pink-
 
 export default function Collection() {
   const [selected, setSelected] = useState<CollectionItem | null>(null)
-  const count = (key: 'romantic' | 'dark') => collection.filter((item) => item.category === key).length
+  const count = (key: 'romantic' | 'dark') => collection.filter((item) => item.category === key && item.kind !== 'setting').length
 
   return (
     <>
@@ -76,7 +76,7 @@ export default function Collection() {
               </div>
             </div>
             <div className="cl-grid">
-              {collection.filter((item) => item.category === section.key).map((item) => (
+              {collection.filter((item) => item.category === section.key && item.kind !== 'setting').map((item) => (
                 <article className="cl-look" key={item.slug}>
                   <button type="button" className="cl-look-image" onClick={() => setSelected(item)} aria-label={`View ${item.name} larger`}>
                     <img src={item.image} alt={`${item.name} wedding styling by Hearts in Bloom`} loading="lazy" />
