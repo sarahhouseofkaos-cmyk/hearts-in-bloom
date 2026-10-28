@@ -57,7 +57,7 @@ export default function Home() {
         <div className="story-collection-grid">
           <article className="story-collection-romantic">
             <Link to="/collection" className="story-collection-image" aria-label="Explore the Romantic collection">
-              <img src={asset('/images/romantic-heart-arch.webp')} alt="Red, blush and ivory floral heart arch styled for an indoor wedding ceremony" loading="lazy" />
+              <img src={asset('/images/soft-blush-garden.webp')} alt="Soft blush and ivory rose heart arch with delicate greenery" loading="lazy" />
             </Link>
             <div className="story-collection-copy">
               <p className="eyebrow">Romantic collection</p>
