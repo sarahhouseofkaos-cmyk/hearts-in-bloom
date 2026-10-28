@@ -57,7 +57,7 @@ export default function Home() {
           <span className="image-index">The Dark Romance Collection</span>
         </div>
         <div className="feature-copy">
-          <p className="eyebrow">Moody tones · Quiet drama</p>
+          <p className="eyebrow">Moody tones · Candlelit drama</p>
           <h2>For love with<br /><em>a little edge.</em></h2>
           <p>Gothic throne chairs, candlelit details and rich floral palettes. A collection for gothic souls, alternative celebrations and couples who dream in deeper tones.</p>
           <Link to="/dark-romance" className="button button-light">Enter Dark Romance <ArrowRight size={17} /></Link>
@@ -100,14 +100,14 @@ export default function Home() {
         <div className="process-grid">
           <div><span>01</span><h3>Tell us your vision</h3><p>Share your date, venue, favourite pieces and the atmosphere you want to create.</p></div>
           <div><span>02</span><h3>Receive your proposal</h3><p>Sarah prepares a personal quotation and styling direction for your celebration.</p></div>
-          <div><span>03</span><h3>Simply enjoy the moment</h3><p>We deliver, install and collect, with every practical detail quietly handled.</p></div>
+          <div><span>03</span><h3>Simply enjoy the moment</h3><p>We deliver, install and collect, with every practical detail taken care of.</p></div>
         </div>
       </section>
 
       <section className="about-preview" data-reveal>
         <div className="about-preview-image mask-image"><img src={asset('/images/lush-ivory-greenery.webp')} alt="Ivory floral heart arch styling by Hearts in Bloom" loading="lazy" /></div>
         <div className="about-preview-copy">
-          <p className="eyebrow">The quiet heart behind the business</p>
+          <p className="eyebrow">The person behind the business</p>
           <h2>Hello, I’m Sarah.</h2>
           <p>I created Hearts in Bloom from a love of romantic details and beautifully styled moments. I’ll take the time to understand your venue, your colours and the feeling you want your day to hold.</p>
           <p>Nothing is off-the-shelf in spirit. Every arch is hand-styled with care, and every enquiry comes directly to me.</p>

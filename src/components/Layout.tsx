@@ -1,9 +1,10 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useContext, useEffect, useState, type ReactNode } from 'react'
 import { Link, NavLink, useLocation } from 'react-router'
 import * as Dialog from '@radix-ui/react-dialog'
 import { ArrowRight, Facebook, Instagram, Menu, X } from 'lucide-react'
 import Logo, { HeartMark } from './Logo'
 import { email, socialLinks } from '../data'
+import { HeadContext } from '../head'
 
 const nav = [
   { to: '/collection', label: 'Collection' },
@@ -14,6 +15,14 @@ const nav = [
 ]
 
 const SITE_URL = 'https://heartsinbloom.co.uk'
+
+function PinterestIcon({ size = 19 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z" />
+    </svg>
+  )
+}
 
 function setHeadTag(selector: string, create: () => HTMLElement, attribute: string, value: string) {
   let element = document.head.querySelector<HTMLElement>(selector)
@@ -26,6 +35,9 @@ function setHeadTag(selector: string, create: () => HTMLElement, attribute: stri
 
 export function PageMeta({ title, description }: { title: string; description: string }) {
   const { pathname } = useLocation()
+  const head = useContext(HeadContext)
+  // Only present while pre-rendering pages at build time (see src/entry-server.tsx).
+  head?.setPage(`${title} | Hearts in Bloom`, description)
   useEffect(() => {
     const fullTitle = `${title} | Hearts in Bloom`
     document.title = fullTitle
@@ -44,7 +56,11 @@ export function PageMeta({ title, description }: { title: string; description: s
 
 /** Adds a JSON-LD block (structured data for search engines) while the page is shown. */
 export function JsonLd({ id, data }: { id: string; data: object }) {
+  const head = useContext(HeadContext)
+  head?.addJsonLd(id, data)
   useEffect(() => {
+    // Replace any copy written into the pre-rendered page.
+    document.getElementById(id)?.remove()
     const script = document.createElement('script')
     script.type = 'application/ld+json'
     script.id = id
@@ -141,7 +157,7 @@ function Footer() {
           <p>Romantic heart arches, statement seating and thoughtful styling for beautifully personal celebrations.</p>
           <div className="social-links">
             <a href={socialLinks.instagram} target="_blank" rel="noreferrer" aria-label="Hearts in Bloom on Instagram"><Instagram size={19} /></a>
-            <a href={socialLinks.pinterest} target="_blank" rel="noreferrer" aria-label="Hearts in Bloom on Pinterest" className="pinterest-icon">P</a>
+            <a href={socialLinks.pinterest} target="_blank" rel="noreferrer" aria-label="Hearts in Bloom on Pinterest"><PinterestIcon size={18} /></a>
             <a href={socialLinks.facebook} target="_blank" rel="noreferrer" aria-label="Hearts in Bloom on Facebook"><Facebook size={19} /></a>
           </div>
         </div>

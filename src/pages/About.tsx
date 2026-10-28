@@ -11,7 +11,7 @@ export default function About() {
         <div className="about-hero-copy">
           <p className="eyebrow">The person behind the petals</p>
           <h1>Hello,<br /><em>I’m Sarah.</em></h1>
-          <p>The quiet heart behind Hearts in Bloom — a small wedding-styling business built on romantic details, thoughtful choices and genuinely personal care.</p>
+          <p>The stylist behind Hearts in Bloom — a small wedding-styling business built on romantic details, thoughtful choices and genuinely personal care.</p>
         </div>
         <div className="about-hero-images">
           <img className="about-image-main" src={asset('/images/styling-detail.webp')} alt="Carefully arranged wedding florals" />
@@ -20,9 +20,9 @@ export default function About() {
       </section>
 
       <section className="story-section section-pad" data-reveal>
-        <div><p className="eyebrow">My story</p><h2>A love of the<br /><em>quietly special.</em></h2></div>
+        <div><p className="eyebrow">My story</p><h2>A love of the<br /><em>beautifully personal.</em></h2></div>
         <div className="story-copy">
-          <p>Hearts in Bloom began with a simple love of soft, romantic details and the quiet beauty of a well-styled moment. Based in Newcastle upon Tyne, I create signature heart arches and luxury hire pieces designed to frame the most meaningful parts of your day.</p>
+          <p>Hearts in Bloom began with a simple love of soft, romantic details and the beauty of a well-styled moment. Based in Newcastle upon Tyne, I create signature heart arches and luxury hire pieces designed to frame the most meaningful parts of your day.</p>
           <p>Every arch is styled by hand, whether you prefer classic ivory, soft blush, lush greenery or something deeper and more atmospheric. My approach is personal and considered: I take time to understand your vision, your venue and the feeling you want to create.</p>
           <p>From our first conversation to the moment I finish setting up, everything is handled with calm and care. The finished look should feel like a natural part of your celebration — never something simply added on top.</p>
         </div>
