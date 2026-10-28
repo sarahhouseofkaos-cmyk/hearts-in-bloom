@@ -1,20 +1,14 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
-import { ArrowRight, Check, Expand } from 'lucide-react'
+import { ArrowRight, Expand } from 'lucide-react'
 import { collection, packages, type CollectionItem } from '../data'
 import { EnquiryBand, PageMeta } from '../components/Layout'
 import Lightbox from '../components/Lightbox'
 import { asset } from '../lib/asset'
 
-const moods = [
-  { title: 'Jewel-toned drama', copy: 'Teal and midnight blue bring depth and richness, balanced with cascading foliage and a little breathing room around the flowers.', link: '/design-your-heart?atmosphere=dark&style=teal-noir', linkText: 'Begin with Teal Noir' },
-  { title: 'Velvet romance', copy: 'Plum, mauve and dusty blue feel moody without becoming heavy—romantic palettes with softness still at their centre.', link: '/design-your-heart?atmosphere=dark&style=midnight-plum', linkText: 'Begin with Midnight Plum' },
-  { title: 'Gothic elegance', copy: 'Ornate black seating, dark florals and candlelit details create a more theatrical setting for alternative celebrations.', link: '/design-your-heart?atmosphere=dark&style=candlelit-gothic', linkText: 'Begin with Candlelit Gothic' },
-]
-
 export default function DarkRomance() {
   const [selected, setSelected] = useState<CollectionItem | null>(null)
-  const items = collection.filter((item) => item.category === 'dark')
+  const items = collection.filter((item) => item.category === 'dark' && item.kind !== 'setting')
   const darkPackages = packages.filter((item) => ['The Ceremony', 'The Statement', 'The Full Look'].includes(item.name))
 
   return (
@@ -39,19 +33,9 @@ export default function DarkRomance() {
         <span>Atmospheric palettes, expressive florals and the same personal care.</span>
       </section>
 
-      <section className="dark-moods section-pad">
-        <div className="section-heading horizontal-heading">
-          <div><p className="eyebrow">Find your atmosphere</p><h2>Three ways<br /><em>into the dark.</em></h2></div>
-          <p>Start with the mood rather than a fixed shopping list. Each direction can become a ceremony backdrop, portrait setting or sweetheart-table focal point.</p>
-        </div>
-        <div className="dark-mood-grid">
-          {moods.map((mood) => <article key={mood.title} data-reveal><h3>{mood.title}</h3><p>{mood.copy}</p><Link to={mood.link} className="text-link">{mood.linkText} <ArrowRight size={14} /></Link></article>)}
-        </div>
-      </section>
-
       <section className="dark-collection section-pad">
         <div className="section-heading horizontal-heading">
-          <div><p className="eyebrow">Signature looks</p><h2>Choose your<br /><em>after-dark atmosphere.</em></h2></div>
+          <div><p className="eyebrow">Six signature arches</p><h2>Choose your<br /><em>after-dark atmosphere.</em></h2></div>
           <p>Each look can be tailored to your venue and colour story. Select an image to view it larger, or use it as your starting point in Design your heart.</p>
         </div>
         <div className="dark-grid">
@@ -61,12 +45,26 @@ export default function DarkRomance() {
                 <img src={item.image} alt={`${item.name} Dark Romance styling`} loading="lazy" />
                 <span><Expand size={18} /></span>
               </button>
-              <p>{item.source}</p>
               <h3>{item.name}</h3>
               <span>{item.description}</span>
-              <Link to={`/design-your-heart?atmosphere=dark&style=${item.slug}`} className="text-link">Design with this look <ArrowRight size={14} /></Link>
+              <div className="dark-look-actions">
+                <Link to={`/design-your-heart?atmosphere=dark&style=${item.slug}`} className="text-link">Design with this look <ArrowRight size={14} /></Link>
+                <Link to={`/enquire?style=${item.slug}`} className="dark-look-enquire">Enquire</Link>
+              </div>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="dark-thrones" data-reveal>
+        <div className="dark-thrones-image"><img src={asset('/images/throne-gothic-black.webp')} alt="A pair of ornate gothic black throne chairs behind a candlelit sweetheart table with dark florals" loading="lazy" /></div>
+        <div className="dark-thrones-copy">
+          <p className="eyebrow">Gothic black thrones</p>
+          <h2>A seat fit for<br /><em>the after-dark.</em></h2>
+          <p>Ornate carved black thrones for your sweetheart table, ceremony or portraits. Pair them with a dark arch and candlelight for the full Dark Romance setting.</p>
+          <div className="throne-price"><span>Single chair</span><strong>£150</strong></div>
+          <div className="throne-price"><span>Pair of chairs</span><strong>£300</strong></div>
+          <Link to="/collection#thrones" className="text-link">See all four throne styles <ArrowRight size={16} /></Link>
         </div>
       </section>
 
@@ -115,19 +113,6 @@ export default function DarkRomance() {
         </div>
       </section>
 
-      <section className="dark-details" data-reveal>
-        <div>
-          <p className="eyebrow">Everything taken care of</p>
-          <h2>Drama in the details.<br />Calm in the process.</h2>
-          <Link to="/design-your-heart?atmosphere=dark" className="button button-light">Create your starting point <ArrowRight size={16} /></Link>
-        </div>
-        <ul>
-          <li><Check size={17} /> Delivery, professional set-up and collection</li>
-          <li><Check size={17} /> Styling in your chosen Dark Romance palette</li>
-          <li><Check size={17} /> A personal consultation and tailored quotation</li>
-          <li><Check size={17} /> Free local delivery within approximately 40 miles of Newcastle</li>
-        </ul>
-      </section>
       <EnquiryBand
         dark
         eyebrow="Your after-dark atmosphere begins here"

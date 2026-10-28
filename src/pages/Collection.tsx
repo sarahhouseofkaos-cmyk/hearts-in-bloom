@@ -99,7 +99,7 @@ export default function Collection() {
         </Fragment>
       ))}
 
-      <section className="thrones section-pad" data-reveal>
+      <section className="thrones section-pad" id="thrones" data-reveal>
         <div className="thrones-inner">
           <div className="thrones-head">
             <p className="eyebrow">Statement seating</p>
