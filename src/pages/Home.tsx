@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { ArrowDownRight, ArrowRight, Check } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Check } from 'lucide-react'
 import { EnquiryBand, PageMeta } from '../components/Layout'
 import { asset } from '../lib/asset'
 import { RealWeddings, Testimonials } from '../components/Proof'
@@ -10,20 +10,17 @@ export default function Home() {
       <PageMeta title="Wedding Styling & Luxury Hire in Newcastle upon Tyne" description="Romantic heart arches, throne chairs and personal wedding styling by Hearts in Bloom. Delivery, set-up and collection across Newcastle and the North East." />
       <section className="home-hero">
         <div className="hero-copy">
-          <p className="eyebrow">Wedding styling · Newcastle upon Tyne</p>
-          <h1>The quiet heart<br />of <em>your day.</em></h1>
-          <p className="hero-intro">Signature heart arches and statement seating, styled by hand for celebrations that feel beautifully, unmistakably yours.</p>
+          <p className="eyebrow">Romantic wedding styling · Newcastle upon Tyne</p>
+          <h1>A beautiful setting<br />for <em>your love story.</em></h1>
+          <p className="hero-intro">Hello, I’m Sarah. I create hand-styled heart arches and statement settings for couples who want their wedding to feel personal, romantic and entirely their own.</p>
           <div className="hero-actions">
-            <Link to="/collection" className="button button-primary">Explore the collection <ArrowRight size={17} /></Link>
-            <Link to="/enquire" className="text-link">Check your date <ArrowDownRight size={16} /></Link>
-          </div>
-          <div className="hero-note">
-            <span>Arches from £150</span><span>Free delivery within ~40 miles</span><span>Replies in 24–48 hours</span>
+            <Link to="/about" className="button button-primary">Discover our story <ArrowRight size={17} /></Link>
+            <Link to="/collection" className="text-link">Explore the collection <ArrowUpRight size={16} /></Link>
           </div>
         </div>
         <div className="hero-visual">
           <img src={asset('/images/hero-heart-arch.webp')} alt="A couple beneath a romantic floral heart arch" fetchPriority="high" />
-          <div className="hero-caption"><span>Signature heart arches</span><span>Made for your moment</span></div>
+          <div className="hero-caption"><span>Arches from £150</span><span>Free delivery within ~40 miles</span><span>Replies in 24–48 hours</span></div>
         </div>
       </section>
 
