@@ -68,6 +68,12 @@ describe('Design enquiry handoff', () => {
     expect(summary.length).toBeLessThan(1000)
   })
 
+  it('includes the chosen throne style only when chairs are selected', () => {
+    const recommendation = getDesignRecommendation({ ...base, seating: 'pair' })
+    expect(createDesignSummary({ ...base, seating: 'pair', throneStyle: 'Gothic black' }, 'Midnight Plum', recommendation)).toContain('A pair of throne chairs (Gothic black)')
+    expect(createDesignSummary({ ...base, seating: 'none', throneStyle: 'Gothic black' }, 'Midnight Plum', getDesignRecommendation(base))).not.toContain('Gothic black')
+  })
+
   it('accepts only known atmosphere parameters', () => {
     expect(atmosphereFromParam('dark')).toBe('dark')
     expect(atmosphereFromParam('romantic')).toBe('romantic')

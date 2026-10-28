@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react'
 import { Link } from 'react-router'
 import { ArrowDown, ArrowRight, ArrowUpRight, Expand } from 'lucide-react'
-import { collection, type CollectionItem } from '../data'
+import { collection, thrones, type CollectionItem } from '../data'
 import { EnquiryBand, PageMeta } from '../components/Layout'
 import Lightbox from '../components/Lightbox'
 import { asset } from '../lib/asset'
@@ -21,13 +21,6 @@ const sections = [
     title: <>Deep, moody<br /><em>&amp; dramatic.</em></>,
     copy: 'Jewel tones, dark florals and gothic seating, for alternative celebrations and couples who love a little drama.',
   },
-]
-
-const thrones = [
-  { name: 'Gold', copy: 'Classic carved gold, warm and regal.', image: '/images/throne-chairs.webp', alt: 'A couple seated on gold throne chairs from Hearts in Bloom' },
-  { name: 'Gothic black', copy: 'Ornate black thrones for Dark Romance settings.', image: '/images/throne-gothic-black.webp', alt: 'A pair of ornate gothic black throne chairs behind a candlelit sweetheart table' },
-  { name: 'White', copy: 'Carved ivory-white thrones, light and elegant.', image: '/images/throne-white.webp', alt: 'A couple seated on carved white throne chairs outside a country house' },
-  { name: 'The crown pair', copy: 'Our one-of-a-kind gilded pair with crown tops.', image: '/images/throne-crown.webp', alt: 'A couple seated on a unique pair of gilded crown-topped throne chairs' },
 ]
 
 const heroPhotos = ['/images/arch-country-house-ivory.webp', '/images/arch-pink-hydrangea.webp', '/images/midnight-plum.webp', '/images/throne-gothic-black.webp']

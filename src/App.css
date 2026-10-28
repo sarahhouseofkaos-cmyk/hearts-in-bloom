@@ -1649,3 +1649,163 @@ h3 { line-height: 1.2; }
   .dark-thrones-image { min-height: 0; aspect-ratio: 3 / 2; }
 }
 .thrones { scroll-margin-top: 5rem; }
+
+/* Design your heart (redesign) */
+.dh-hero { max-width: var(--container); margin: 0 auto; padding: clamp(3.5rem, 7vw, 6rem) var(--gutter) clamp(2.5rem, 5vw, 4rem); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 2.5rem 5rem; align-items: center; }
+.dh-hero .eyebrow { color: var(--accent-action); margin-bottom: 1.2rem; }
+.dh-hero h1 { font-size: clamp(3.2rem, 6vw, 6rem); line-height: 1; letter-spacing: -0.04em; }
+.dh-hero h1 em { color: var(--accent-action); }
+.dh-hero-copy > p:last-child { max-width: 34rem; margin-top: 1.4rem; color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; }
+.dh-hero-steps { display: grid; gap: 0; border-top: 1px solid var(--border); }
+.dh-hero-steps li { display: flex; gap: 1.2rem; align-items: baseline; padding: 1.1rem 0; border-bottom: 1px solid var(--border); }
+.dh-hero-steps li > span { color: var(--accent-action); font-family: var(--font-display); font-size: 1.4rem; }
+.dh-hero-steps strong { display: block; font-family: var(--font-display); font-size: 1.3rem; font-weight: 400; }
+.dh-hero-steps small { display: block; margin-top: 0.15rem; color: var(--text-muted); font-size: 0.85rem; }
+
+.dh-studio { padding: 0 var(--gutter) var(--section-space); }
+.dh-stepper { position: sticky; top: 82px; z-index: 6; max-width: var(--container); margin: 0 auto; padding: 0.9rem 0; background: color-mix(in oklch, var(--paper-100) 94%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+.dh-stepper ol { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; }
+.dh-stepper button { display: flex; align-items: center; gap: 0.7rem; width: 100%; min-height: 44px; padding: 0; border: 0; background: transparent; color: var(--text-muted); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; }
+.dh-stepper button:disabled { cursor: default; opacity: 0.5; }
+.dh-step-dot { flex: 0 0 auto; display: grid; place-items: center; width: 2rem; height: 2rem; border: 1px solid var(--border); border-radius: 50%; font-size: 0.8rem; letter-spacing: 0; background: var(--paper-100); }
+.dh-stepper li.current button { color: var(--ink-900); }
+.dh-stepper li.current .dh-step-dot { background: var(--accent-action); border-color: var(--accent-action); color: var(--light-100); }
+.dh-stepper li.complete .dh-step-dot { background: var(--paper-300); border-color: var(--paper-300); color: var(--ink-900); }
+
+.dh-workspace { max-width: var(--container); margin: clamp(2rem, 4vw, 3rem) auto 0; display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: clamp(2rem, 4vw, 4rem); align-items: start; }
+.dh-stage { min-width: 0; scroll-margin-top: 10rem; animation: dh-in 260ms ease-out both; }
+.dh-stage > .eyebrow { color: var(--accent-action); margin-bottom: 0.8rem; }
+.dh-stage > h2 { font-size: clamp(2.2rem, 3.6vw, 3.4rem); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: clamp(1.5rem, 3vw, 2.25rem); }
+@keyframes dh-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.dh-tick { position: absolute; top: 0.75rem; right: 0.75rem; display: grid; place-items: center; width: 1.9rem; height: 1.9rem; border-radius: 50%; border: 1.5px solid rgba(255, 255, 255, 0.85); background: rgba(0, 0, 0, 0.12); color: var(--light-100); transition: background-color 160ms ease-out, border-color 160ms ease-out; }
+.selected > .dh-tick, .selected .dh-tick { background: var(--accent-action); border-color: var(--accent-action); }
+
+.dh-saved { display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center; padding: 1.1rem 1.25rem; margin-bottom: 1.5rem; background: var(--paper-200); }
+.dh-saved svg { color: var(--accent-action); }
+.dh-saved p { color: var(--text-muted); font-size: 0.85rem; }
+.dh-saved-actions { display: flex; align-items: center; gap: 1rem; }
+.dh-text-button { padding: 0; border: 0; background: none; color: var(--text-muted); font-size: 0.8rem; text-decoration: underline; cursor: pointer; }
+
+.dh-atmos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(0.9rem, 2vw, 1.5rem); }
+.dh-atmos-card { position: relative; display: block; padding: 0; border: 0; overflow: hidden; aspect-ratio: 4 / 5; background: var(--night-900); cursor: pointer; text-align: left; outline: 3px solid transparent; outline-offset: 3px; transition: outline-color 160ms ease-out; }
+.dh-atmos-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 400ms ease-out; }
+.dh-atmos-card:hover img { transform: scale(1.03); }
+.dh-atmos-card.selected { outline-color: var(--accent-action); }
+.dh-atmos-text { position: absolute; inset: auto 0 0; display: flex; flex-direction: column; gap: 0.3rem; padding: 4rem 1.4rem 1.4rem; background: linear-gradient(180deg, transparent, rgba(20, 14, 18, 0.82)); color: var(--light-100); }
+.dh-atmos-text small { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-300); }
+.dh-atmos-text strong { font-family: var(--font-display); font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 400; line-height: 1.05; }
+.dh-atmos-text em { font-style: normal; font-size: 0.88rem; color: var(--paper-200); }
+
+.dh-instruction { margin: -0.75rem 0 1.5rem; color: var(--text-muted); }
+.dh-looks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.75rem 1rem; }
+.dh-look { display: flex; flex-direction: column; align-items: flex-start; gap: 0.35rem; padding: 0; border: 0; background: none; text-align: left; cursor: pointer; }
+.dh-look-image { position: relative; display: block; width: 100%; overflow: hidden; background: var(--paper-300); outline: 3px solid transparent; outline-offset: 3px; transition: outline-color 160ms ease-out; }
+.dh-look-image img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; transition: transform 320ms ease-out; }
+.dh-look:hover .dh-look-image img { transform: scale(1.03); }
+.dh-look.selected .dh-look-image { outline-color: var(--accent-action); }
+.dh-look strong { margin-top: 0.6rem; font-family: var(--font-display); font-size: 1.25rem; font-weight: 400; line-height: 1.15; }
+.dh-look small { color: var(--text-muted); font-size: 0.8rem; line-height: 1.5; }
+
+.dh-details { display: grid; gap: 1.75rem; }
+.dh-group { min-width: 0; margin: 0; padding: 0 0 1.75rem; border: 0; border-bottom: 1px solid var(--border); }
+.dh-group legend { padding: 0; margin-bottom: 0.9rem; font-family: var(--font-display); font-size: 1.35rem; }
+.dh-group legend span { color: var(--text-muted); font-family: var(--font-body); font-size: 0.8rem; }
+.dh-group > p { margin: -0.5rem 0 0.9rem; color: var(--text-muted); font-size: 0.85rem; }
+.dh-group-options { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.dh-chip { position: relative; display: inline-flex; align-items: center; gap: 0.55rem; min-height: 46px; padding: 0.6rem 1.1rem 0.6rem 0.8rem; border: 1px solid var(--border); border-radius: 999px; background: var(--paper-100); color: var(--ink-900); font-size: 0.9rem; cursor: pointer; text-align: left; transition: border-color 160ms ease-out, background-color 160ms ease-out; }
+.dh-chip:hover { border-color: var(--ink-700); }
+.dh-chip strong { font-weight: 500; }
+.dh-chip-tick { display: grid; place-items: center; width: 1.25rem; height: 1.25rem; border: 1px solid var(--border); border-radius: 50%; color: var(--light-100); flex: 0 0 auto; }
+.dh-chip.selected { border-color: var(--accent-action); background: color-mix(in oklch, var(--accent-action) 8%, var(--paper-100)); }
+.dh-chip.selected .dh-chip-tick { background: var(--accent-action); border-color: var(--accent-action); }
+.dh-chip-card { flex: 1 1 12rem; flex-direction: column; align-items: flex-start; gap: 0.25rem; padding: 1rem 1.1rem; border-radius: 0; }
+.dh-chip-card .dh-chip-tick { position: absolute; top: 0.9rem; right: 0.9rem; }
+.dh-chip-card strong { font-family: var(--font-display); font-size: 1.15rem; font-weight: 400; padding-right: 1.75rem; }
+.dh-chip-card small { color: var(--text-muted); font-size: 0.8rem; }
+.dh-thrones { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+.dh-throne { display: flex; flex-direction: column; gap: 0.5rem; padding: 0; border: 0; background: none; text-align: left; cursor: pointer; }
+.dh-throne-image { position: relative; display: block; width: 100%; overflow: hidden; outline: 3px solid transparent; outline-offset: 2px; transition: outline-color 160ms ease-out; }
+.dh-throne-image img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+.dh-throne.selected .dh-throne-image { outline-color: var(--accent-action); }
+.dh-throne strong { font-size: 0.85rem; font-weight: 500; }
+.dh-throne .dh-tick { width: 1.6rem; height: 1.6rem; top: 0.5rem; right: 0.5rem; }
+
+.dh-result { display: grid; gap: 1.5rem; }
+.dh-recommend { padding: clamp(1.75rem, 3.5vw, 2.5rem); background: var(--night-900); color: var(--light-100); }
+.dh-recommend > span { font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--plum-200); }
+.dh-recommend h3 { margin-top: 0.6rem; font-size: clamp(2rem, 3.4vw, 3rem); }
+.dh-recommend > strong { display: block; margin-top: 0.3rem; font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; color: var(--plum-200); }
+.dh-recommend > p { margin-top: 0.9rem; color: var(--paper-300); font-size: 0.92rem; }
+.dh-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 2rem; margin: 0; }
+.dh-summary > div { padding: 0.8rem 0; border-bottom: 1px solid var(--border); }
+.dh-summary dt { color: var(--text-muted); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.dh-summary dd { margin: 0.2rem 0 0; font-size: 0.98rem; }
+.dh-note { color: var(--text-muted); font-size: 0.85rem; }
+.dh-result-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+.dh-result-actions .button-outline { gap: 0.5rem; }
+.dh-save-notice { color: var(--accent-action); font-size: 0.85rem; }
+
+.dh-controls { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: clamp(2rem, 4vw, 2.75rem); padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.dh-controls .button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+.dh-back { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 44px; padding: 0; border: 0; background: none; color: var(--text-muted); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }
+.dh-back:hover { color: var(--ink-900); }
+
+.dh-board { position: sticky; top: 9.5rem; padding: clamp(1.25rem, 2.5vw, 1.75rem); background: var(--paper-200); }
+.dh-board .eyebrow { color: var(--accent-action); margin-bottom: 1rem; }
+.dh-board-images { display: grid; grid-template-columns: 1fr; gap: 0.6rem; }
+.dh-board-images.with-throne { grid-template-columns: 1.6fr 1fr; }
+.dh-board-main, .dh-board-throne { position: relative; overflow: hidden; background: var(--paper-300); animation: dh-in 300ms ease-out both; }
+.dh-board-main img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.dh-board-images.with-throne .dh-board-throne { height: 100%; }
+.dh-board-throne img { width: 100%; height: 100%; object-fit: cover; }
+.dh-board-throne span { position: absolute; left: 0.5rem; bottom: 0.5rem; padding: 0.2rem 0.5rem; background: color-mix(in oklch, var(--paper-100) 92%, transparent); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.dh-board h3 { margin-top: 1.1rem; font-size: 1.7rem; }
+.dh-board > p { margin-top: 0.35rem; color: var(--text-muted); font-size: 0.88rem; }
+.dh-palette { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin-top: 1rem; }
+.dh-palette span { display: inline-flex; align-items: center; gap: 0.45rem; color: var(--text-muted); font-size: 0.75rem; }
+.dh-palette i { width: 1.4rem; height: 1.4rem; border-radius: 50%; border: 1px solid rgba(0, 0, 0, 0.08); }
+.dh-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.1rem; }
+.dh-tags li { padding: 0.35rem 0.75rem; border-radius: 999px; background: var(--paper-100); font-size: 0.78rem; }
+.dh-tags li.empty { background: transparent; border: 1px dashed var(--paper-300); color: var(--text-muted); }
+.dh-board-price { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--paper-300); }
+.dh-board-price small { display: block; color: var(--text-muted); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.dh-board-price strong { display: block; margin-top: 0.25rem; font-family: var(--font-display); font-size: 1.2rem; font-weight: 400; color: var(--accent-action); }
+
+.dh-after { padding: clamp(3rem, 6vw, 4.5rem) var(--gutter); background: var(--paper-200); text-align: center; }
+.dh-after h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); }
+.dh-after p { max-width: 34rem; margin: 0.9rem auto 0; color: var(--text-muted); }
+.dh-after .text-link { margin: 1.4rem auto 0; }
+
+@media (max-width: 1000px) {
+  .dh-workspace { grid-template-columns: 1fr; }
+  .dh-board { position: static; order: -1; display: grid; grid-template-columns: 9rem 1fr; gap: 0 1rem; align-items: start; }
+  .dh-board .eyebrow { grid-column: 1 / -1; }
+  .dh-board-images, .dh-board-images.with-throne { grid-column: 1; grid-row: 2 / span 5; grid-template-columns: 1fr; }
+  .dh-board-throne { display: none; }
+  .dh-board h3 { margin-top: 0; font-size: 1.35rem; }
+  .dh-board > *:not(.eyebrow):not(.dh-board-images) { grid-column: 2; }
+  .dh-looks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .dh-hero { grid-template-columns: 1fr; }
+  .dh-stepper { top: 76px; }
+}
+@media (max-width: 600px) {
+  .dh-stepper { position: static; }
+  .dh-step-label { display: none; }
+  .dh-stepper li.current .dh-step-label { display: inline; }
+  .dh-stepper ol { grid-template-columns: auto auto auto 1fr; gap: 0.75rem; }
+  .dh-atmos { grid-template-columns: 1fr; }
+  .dh-atmos-card { aspect-ratio: 4 / 3; }
+  .dh-thrones { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dh-summary { grid-template-columns: 1fr; }
+  .dh-saved { grid-template-columns: auto 1fr; }
+  .dh-saved-actions { grid-column: 1 / -1; }
+  .dh-board { grid-template-columns: 6.5rem 1fr; }
+  .dh-result-actions .button { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dh-stage, .dh-board-main, .dh-board-throne { animation: none; }
+  .dh-atmos-card img, .dh-look-image img { transition: none; }
+}
