@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { ArrowLeft, ArrowRight, Ban, Check, Crown, Heart, RotateCcw, Save } from 'lucide-react'
-import { collection, thrones } from '../data'
+import { collection, thrones, type CollectionItem } from '../data'
+import ColourArch from '../components/ColourArch'
+import { CUSTOM_LOOK_SLUG, MAX_FLOWER_COLOURS, coloursByName, defaultCustomColours, describeCustomColours, flowerColours, foliageOptions, isHexColour } from '../lib/colours'
 import { PageMeta } from '../components/Layout'
 import { asset } from '../lib/asset'
 import { defaultPalette, lookPalettes, weddingMoments } from '../moments'
@@ -67,6 +69,10 @@ function readSavedDesign(): DesignSelection | null {
     const parsed = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || 'null') as Partial<DesignSelection> | null
     if (!parsed || typeof parsed !== 'object') return null
     const selection = { ...emptyDesign, ...parsed }
+    if (selection.styleSlug === CUSTOM_LOOK_SLUG) {
+      const valid = Array.isArray(selection.customColours) && selection.customColours.length > 0 && selection.customColours.every((colour) => colour && typeof colour.name === 'string' && isHexColour(colour.value))
+      return valid && selection.atmosphere ? selection : null
+    }
     const look = collection.find((item) => item.slug === selection.styleSlug)
     if (!look || look.category !== selection.atmosphere) return null
     return selection
@@ -90,19 +96,56 @@ export default function DesignYourHeart() {
   const [saveNotice, setSaveNotice] = useState('')
 
   const looks = collection.filter((item) => item.category === selection.atmosphere && item.kind !== 'setting')
-  const selectedLook = collection.find((item) => item.slug === selection.styleSlug)
+  const isCustom = selection.styleSlug === CUSTOM_LOOK_SLUG
+  const foliageColour = foliageOptions.find((item) => item.name === selection.foliage)
+  const customName = describeCustomColours(selection.customColours, selection.foliage)
+  const customLook: CollectionItem | undefined = isCustom && selection.atmosphere ? {
+    slug: CUSTOM_LOOK_SLUG,
+    name: 'Your own colours',
+    description: selection.customColours.length ? `${selection.customColours.map((colour) => colour.name).join(', ')}${foliageColour ? `, with ${foliageColour.name.toLowerCase()} foliage` : ''}.` : 'Choose your flower colours.',
+    image: asset('/images/arch-bare.webp'),
+    category: selection.atmosphere,
+    source: 'Hearts in Bloom',
+  } : undefined
+  const selectedLook = customLook ?? collection.find((item) => item.slug === selection.styleSlug)
+  const previewCoverage = selection.coverage || 'Fuller top'
   const completeDetails = Boolean(selection.styling && selection.coverage && selection.seating && selection.coordinating && selection.moment)
   const recommendation = useMemo(() => completeDetails ? getDesignRecommendation(selection) : null, [selection, completeDetails])
   const atmosphereCard = atmosphereCards.find((item) => item.value === selection.atmosphere)
   const previewImage = selectedLook?.image ?? (atmosphereCard ? asset(atmosphereCard.image) : '')
-  const palette = selectedLook ? lookPalettes[selectedLook.slug] ?? defaultPalette : defaultPalette
+  const palette = isCustom ? [...selection.customColours, ...(foliageColour ? [foliageColour] : [])] : selectedLook ? lookPalettes[selectedLook.slug] ?? defaultPalette : defaultPalette
   const chosenThrone = selection.seating && selection.seating !== 'none' ? thrones.find((item) => item.name === selection.throneStyle) : undefined
   const seatingLabel = selection.seating === 'pair' ? 'Pair of thrones' : selection.seating === 'single' ? 'One throne' : selection.seating === 'none' ? 'No chairs' : ''
-  const canContinue = step === 0 ? Boolean(selection.atmosphere) : step === 1 ? Boolean(selectedLook) : step === 2 ? completeDetails : true
+  const canContinue = step === 0 ? Boolean(selection.atmosphere) : step === 1 ? Boolean(selectedLook) && (!isCustom || selection.customColours.length > 0) : step === 2 ? completeDetails : true
 
   function update<K extends keyof DesignSelection>(key: K, value: DesignSelection[K]) {
     setSaveNotice('')
     setSelection((current) => ({ ...current, [key]: value }))
+  }
+
+  const [customPick, setCustomPick] = useState('#c98a9e')
+
+  function chooseOwnColours() {
+    setSaveNotice('')
+    setSelection((current) => {
+      const mood = current.atmosphere === 'dark' ? 'dark' : 'romantic'
+      return {
+        ...current,
+        styleSlug: CUSTOM_LOOK_SLUG,
+        customColours: current.customColours.length ? current.customColours : coloursByName(defaultCustomColours[mood]),
+        foliage: current.foliage || (mood === 'dark' ? 'Black foliage' : 'Eucalyptus'),
+      }
+    })
+  }
+
+  function toggleColour(name: string, value: string) {
+    setSaveNotice('')
+    setSelection((current) => {
+      const chosen = current.customColours.some((colour) => colour.value === value)
+      if (chosen) return { ...current, customColours: current.customColours.filter((colour) => colour.value !== value) }
+      if (current.customColours.length >= MAX_FLOWER_COLOURS) return current
+      return { ...current, customColours: [...current.customColours, { name, value }] }
+    })
   }
 
   function chooseAtmosphere(atmosphere: Atmosphere) {
@@ -162,7 +205,7 @@ export default function DesignYourHeart() {
     }
   }
 
-  const enquiryPath = recommendation && selectedLook ? designEnquiryPath(selection, selectedLook.name, recommendation) : '/enquire'
+  const enquiryPath = recommendation && selectedLook ? designEnquiryPath(selection, isCustom ? customName : selectedLook.name, recommendation) : '/enquire'
 
   useEffect(() => {
     if (initialStep.current) {
@@ -223,7 +266,7 @@ export default function DesignYourHeart() {
                     <Heart size={20} strokeWidth={1.5} aria-hidden="true" />
                     <div>
                       <strong>Your saved moodboard is here.</strong>
-                      <p>{collection.find((item) => item.slug === savedDesign.styleSlug)?.name} · saved in this browser on this device.</p>
+                      <p>{savedDesign.styleSlug === CUSTOM_LOOK_SLUG ? 'Your own colours' : collection.find((item) => item.slug === savedDesign.styleSlug)?.name} · saved in this browser on this device.</p>
                     </div>
                     <div className="dh-saved-actions">
                       <button type="button" className="button button-outline" onClick={resumeSavedDesign}>Resume</button>
@@ -252,6 +295,61 @@ export default function DesignYourHeart() {
                     <small>{item.description}</small>
                   </button>
                 ))}
+                <button type="button" className={`dh-look dh-look-own ${isCustom ? 'selected' : ''}`} aria-pressed={isCustom} onClick={chooseOwnColours}>
+                  <span className="dh-look-image">
+                    <ColourArch colours={selection.customColours.length ? selection.customColours : coloursByName(defaultCustomColours[selection.atmosphere === 'dark' ? 'dark' : 'romantic'])} foliage={(foliageColour ?? foliageOptions[1]).value} coverage="Full arch" label="Your own colours preview" />
+                    <span className="dh-look-badge">New</span>
+                    <span className="dh-tick" aria-hidden="true">{isCustom && <Check size={15} />}</span>
+                  </span>
+                  <strong>Your own colours</strong>
+                  <small>Pick your own flower and foliage colours and see them on the arch.</small>
+                </button>
+              </div>
+            )}
+
+            {step === 1 && isCustom && (
+              <div className="dh-own">
+                <ColourArch className="dh-own-preview" colours={selection.customColours} foliage={foliageColour?.value ?? ''} coverage={previewCoverage} />
+                <div className="dh-own-controls">
+                  <fieldset className="dh-group">
+                    <legend>Flower colours <span>(up to {MAX_FLOWER_COLOURS}, main colour first)</span></legend>
+                    <div className="dh-swatch-grid">
+                      {flowerColours.map((colour) => {
+                        const position = selection.customColours.findIndex((item) => item.value === colour.value)
+                        const full = position === -1 && selection.customColours.length >= MAX_FLOWER_COLOURS
+                        return (
+                          <button type="button" key={colour.name} className={`dh-swatch ${position !== -1 ? 'selected' : ''}`} aria-pressed={position !== -1} disabled={full} onClick={() => toggleColour(colour.name, colour.value)} title={colour.name}>
+                            <i style={{ backgroundColor: colour.value }} aria-hidden="true">{position !== -1 && <b>{position + 1}</b>}</i>
+                            <span>{colour.name}</span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                    <div className="dh-own-custom">
+                      <label>
+                        <span>Your exact shade</span>
+                        <input type="color" value={customPick} onChange={(event) => setCustomPick(event.target.value)} />
+                      </label>
+                      <button type="button" className="button button-outline" disabled={selection.customColours.length >= MAX_FLOWER_COLOURS || selection.customColours.some((colour) => colour.value === customPick)} onClick={() => toggleColour(`Your shade ${customPick.toUpperCase()}`, customPick)}>Add this colour</button>
+                    </div>
+                    {selection.customColours.length > 0 && (
+                      <ul className="dh-own-chosen" aria-label="Your chosen colours">
+                        {selection.customColours.map((colour) => (
+                          <li key={colour.value}><i style={{ backgroundColor: colour.value }} aria-hidden="true" />{colour.name}<button type="button" onClick={() => toggleColour(colour.name, colour.value)} aria-label={`Remove ${colour.name}`}>×</button></li>
+                        ))}
+                      </ul>
+                    )}
+                  </fieldset>
+                  <fieldset className="dh-group">
+                    <legend>Foliage</legend>
+                    <div className="dh-chips">
+                      {foliageOptions.map((option) => (
+                        <button type="button" key={option.name} className={`dh-chip dh-chip-swatch ${selection.foliage === option.name ? 'selected' : ''}`} aria-pressed={selection.foliage === option.name} onClick={() => update('foliage', option.name)}><i style={{ backgroundColor: option.value }} aria-hidden="true" />{option.name}</button>
+                      ))}
+                    </div>
+                  </fieldset>
+                  <p className="dh-own-note">A guide to colour and shape only. Sarah will match real flowers to your colours and confirm what’s possible.</p>
+                </div>
               </div>
             )}
 
@@ -361,8 +459,8 @@ export default function DesignYourHeart() {
               <h3>{selectedLook?.name ?? atmosphereCard?.name ?? 'Begin with a feeling'}</h3>
             </div>
             <div className="dh-collage">
-              <div className="dh-tile dh-tile-main" key={previewImage || 'empty'}>
-                {previewImage ? <img src={previewImage} alt={selectedLook ? `${selectedLook.name} heart arch` : ''} /> : <span className="dh-tile-empty"><Heart size={26} strokeWidth={1.3} aria-hidden="true" />Your arch</span>}
+              <div className="dh-tile dh-tile-main" key={isCustom ? 'own' : previewImage || 'empty'}>
+                {isCustom ? <ColourArch colours={selection.customColours} foliage={foliageColour?.value ?? ''} coverage={previewCoverage} /> : previewImage ? <img src={previewImage} alt={selectedLook ? `${selectedLook.name} heart arch` : ''} /> : <span className="dh-tile-empty"><Heart size={26} strokeWidth={1.3} aria-hidden="true" />Your arch</span>}
               </div>
               <div className="dh-tile dh-tile-throne" key={chosenThrone?.name ?? 'none'}>
                 {chosenThrone
