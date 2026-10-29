@@ -38,6 +38,9 @@ The following images were supplied directly by Hearts in Bloom for this redesign
 | `arch-dusky-rose.webp` | supplied October 2026 |
 | `arch-crimson-noir.webp` | supplied October 2026 |
 | `arch-bare.webp` | supplied October 2026 (bare heart arch, used for Your own colours) |
+| `throne-black-garden.webp` | supplied October 2026 |
+| `throne-white-garden.webp` | supplied October 2026 |
+| `throne-crown-garden.webp` | supplied October 2026 |
 
 ## Other assets
 
