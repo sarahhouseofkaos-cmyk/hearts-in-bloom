@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
-import { ArrowLeft, ArrowRight, Check, Heart, RotateCcw, Save } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Ban, Check, Crown, Heart, RotateCcw, Save } from 'lucide-react'
 import { collection, thrones } from '../data'
 import { PageMeta } from '../components/Layout'
 import { asset } from '../lib/asset'
@@ -18,11 +18,36 @@ import {
 } from '../lib/design'
 
 const steps = [
-  { label: 'Atmosphere', title: 'What should it feel like?' },
-  { label: 'Signature look', title: 'Find your starting point.' },
-  { label: 'The details', title: 'Make the setting yours.' },
-  { label: 'Your design', title: 'A beginning, beautifully considered.' },
+  { label: 'Feeling', title: 'What should it feel like?' },
+  { label: 'Arch', title: 'Choose your arch.' },
+  { label: 'Details', title: 'Make it yours.' },
+  { label: 'Your design', title: 'Your design is ready.' },
 ]
+
+const coverageOptions = [
+  { value: 'Top half only', amount: 0.42, detail: 'Florals across the top' },
+  { value: 'Fuller top', amount: 0.66, detail: 'Flowing further down' },
+  { value: 'Full arch', amount: 1, detail: 'Flowers to the ground' },
+]
+
+const atmosphereCards: { value: Atmosphere; name: string; mood: string; copy: string; image: string }[] = [
+  { value: 'romantic', name: 'Romantic', mood: 'Soft light · Abundant florals', copy: 'Ivory, blush and garden greenery.', image: '/images/arch-country-house-ivory.webp' },
+  { value: 'dark', name: 'Dark Romance', mood: 'Moody tones · Candlelit drama', copy: 'Plum, crimson, teal and gothic details.', image: '/images/arch-crimson-noir.webp' },
+]
+
+/** A small heart-arch drawing showing how far the flowers reach. */
+function CoverageHeart({ amount }: { amount: number }) {
+  const halves = [
+    'M50 32 C43 16 30 10 20 13 C8 17 5 32 10 45 C14 56 22 68 27 94',
+    'M50 32 C57 16 70 10 80 13 C92 17 95 32 90 45 C86 56 78 68 73 94',
+  ]
+  return (
+    <svg viewBox="0 0 100 100" className="dh-heart-svg" aria-hidden="true">
+      {halves.map((d) => <path key={d} d={d} className="dh-heart-frame" pathLength={1} />)}
+      {halves.map((d) => <path key={`f${d}`} d={d} className="dh-heart-flowers" pathLength={1} strokeDasharray={`${amount} 1`} />)}
+    </svg>
+  )
+}
 
 const stylingOptions: { value: StylingLevel; title: string; detail: string }[] = [
   { value: 'signature', title: 'Signature silk', detail: 'Our pre-dressed floral styling.' },
@@ -50,26 +75,6 @@ function readSavedDesign(): DesignSelection | null {
   }
 }
 
-function Chip({ selected, onClick, title, detail }: { selected: boolean; onClick: () => void; title: string; detail?: string }) {
-  return (
-    <button type="button" className={`dh-chip ${detail ? 'dh-chip-card' : ''} ${selected ? 'selected' : ''}`} aria-pressed={selected} onClick={onClick}>
-      <span className="dh-chip-tick" aria-hidden="true">{selected && <Check size={13} />}</span>
-      <strong>{title}</strong>
-      {detail && <small>{detail}</small>}
-    </button>
-  )
-}
-
-function Group({ legend, hint, children }: { legend: string; hint?: string; children: ReactNode }) {
-  return (
-    <fieldset className="dh-group">
-      <legend>{legend}</legend>
-      {hint && <p>{hint}</p>}
-      <div className="dh-group-options">{children}</div>
-    </fieldset>
-  )
-}
-
 export default function DesignYourHeart() {
   const [params] = useSearchParams()
   const requestedStyle = collection.find((item) => item.slug === params.get('style'))
@@ -88,7 +93,8 @@ export default function DesignYourHeart() {
   const selectedLook = collection.find((item) => item.slug === selection.styleSlug)
   const completeDetails = Boolean(selection.styling && selection.coverage && selection.seating && selection.coordinating && selection.moment)
   const recommendation = useMemo(() => completeDetails ? getDesignRecommendation(selection) : null, [selection, completeDetails])
-  const previewImage = selectedLook?.image ?? (selection.atmosphere === 'dark' ? asset('/images/gothic-sweetheart-table.webp') : asset('/images/hero-heart-arch.webp'))
+  const atmosphereCard = atmosphereCards.find((item) => item.value === selection.atmosphere)
+  const previewImage = selectedLook?.image ?? (atmosphereCard ? asset(atmosphereCard.image) : '')
   const palette = selectedLook ? lookPalettes[selectedLook.slug] ?? defaultPalette : defaultPalette
   const chosenThrone = selection.seating && selection.seating !== 'none' ? thrones.find((item) => item.name === selection.throneStyle) : undefined
   const seatingLabel = selection.seating === 'pair' ? 'Pair of thrones' : selection.seating === 'single' ? 'One throne' : selection.seating === 'none' ? 'No chairs' : ''
@@ -102,6 +108,16 @@ export default function DesignYourHeart() {
   function chooseAtmosphere(atmosphere: Atmosphere) {
     setSaveNotice('')
     setSelection((current) => ({ ...current, atmosphere, styleSlug: current.atmosphere === atmosphere ? current.styleSlug : '' }))
+  }
+
+  function chooseThrone(name: string) {
+    setSaveNotice('')
+    setSelection((current) => ({ ...current, throneStyle: name, seating: current.seating === 'single' ? 'single' : 'pair' }))
+  }
+
+  function chooseNoChairs() {
+    setSaveNotice('')
+    setSelection((current) => ({ ...current, seating: 'none', throneStyle: '' }))
   }
 
   function next() {
@@ -157,20 +173,28 @@ export default function DesignYourHeart() {
     stageRef.current?.scrollIntoView({ behavior: reduced ? 'instant' : 'smooth', block: 'start' })
   }, [step])
 
+  const stylingTitle = stylingOptions.find((item) => item.value === selection.styling)?.title
+  const boardRows = [
+    ['Feeling', atmosphereCard?.name],
+    ['Arch', selectedLook?.name],
+    ['Flowers', stylingTitle],
+    ['Coverage', selection.coverage],
+    ['Thrones', selection.seating ? `${seatingLabel}${chosenThrone ? ` · ${chosenThrone.name}` : ''}` : ''],
+    ['Moment', selection.moment],
+  ]
+
   return (
     <>
       <PageMeta title="Design Your Heart" description="Create a visual Hearts in Bloom wedding moodboard. Choose your atmosphere, signature arch, flowers and throne chairs, save on your device or send your design to Sarah." />
-      <section className="dh-hero">
-        <div className="dh-hero-copy">
+      <section className="dh-intro">
+        <div>
           <p className="eyebrow">Your styling moodboard</p>
           <h1>Design <em>your heart.</em></h1>
-          <p>Choose a feeling, a look and your finishing touches. Your moodboard builds as you go, then send it to Sarah for a personal proposal.</p>
         </div>
-        <ol className="dh-hero-steps">
-          <li><span>01</span><div><strong>Choose a feeling</strong><small>Romantic or Dark Romance</small></div></li>
-          <li><span>02</span><div><strong>Pick your arch &amp; details</strong><small>Flowers, coverage and throne chairs</small></div></li>
-          <li><span>03</span><div><strong>Send it to Sarah</strong><small>Or save it on this device for later</small></div></li>
-        </ol>
+        <div>
+          <p>Pick a feeling, an arch and your finishing touches, and watch your moodboard come together. Then send it to Sarah for a personal proposal.</p>
+          <small>Takes about two minutes · Nothing is booked until you speak to Sarah</small>
+        </div>
       </section>
 
       <section className="dh-studio" aria-label="Design your heart configurator">
@@ -179,7 +203,7 @@ export default function DesignYourHeart() {
             {steps.map((item, index) => (
               <li key={item.label} className={index === step ? 'current' : index < step ? 'complete' : ''}>
                 <button type="button" onClick={() => index <= furthest && setStep(index)} disabled={index > furthest} aria-current={index === step ? 'step' : undefined}>
-                  <span className="dh-step-dot">{index < step ? <Check size={14} /> : index + 1}</span>
+                  <span className="dh-step-dot">{index < step ? <Check size={13} /> : index + 1}</span>
                   <span className="dh-step-label">{item.label}</span>
                 </button>
               </li>
@@ -208,14 +232,11 @@ export default function DesignYourHeart() {
                   </div>
                 )}
                 <div className="dh-atmos">
-                  {([
-                    ['romantic', 'Romantic', 'Soft light · Abundant florals', 'Ivory, blush and garden greenery.', '/images/arch-country-house-ivory.webp'],
-                    ['dark', 'Dark Romance', 'Moody tones · Candlelit drama', 'Plum, crimson, teal and gothic details.', '/images/arch-crimson-noir.webp'],
-                  ] as [Atmosphere, string, string, string, string][]).map(([value, name, mood, copy, image]) => (
-                    <button type="button" key={value} className={`dh-atmos-card dh-atmos-${value} ${selection.atmosphere === value ? 'selected' : ''}`} aria-pressed={selection.atmosphere === value} onClick={() => chooseAtmosphere(value)}>
-                      <img src={asset(image)} alt="" />
-                      <span className="dh-atmos-text"><small>{mood}</small><strong>{name}</strong><em>{copy}</em></span>
-                      <span className="dh-tick" aria-hidden="true">{selection.atmosphere === value && <Check size={16} />}</span>
+                  {atmosphereCards.map((card) => (
+                    <button type="button" key={card.value} className={`dh-atmos-card ${selection.atmosphere === card.value ? 'selected' : ''}`} aria-pressed={selection.atmosphere === card.value} onClick={() => chooseAtmosphere(card.value)}>
+                      <img src={asset(card.image)} alt="" />
+                      <span className="dh-atmos-text"><small>{card.mood}</small><strong>{card.name}</strong><em>{card.copy}</em></span>
+                      <span className="dh-tick" aria-hidden="true">{selection.atmosphere === card.value && <Check size={16} />}</span>
                     </button>
                   ))}
                 </div>
@@ -223,50 +244,90 @@ export default function DesignYourHeart() {
             )}
 
             {step === 1 && (
-              <>
-                <p className="dh-instruction">Choose the arch closest to your vision. Sarah can tailor the colours and details from there.</p>
-                <div className="dh-looks">
-                  {looks.map((item) => (
-                    <button type="button" key={item.slug} className={`dh-look ${selection.styleSlug === item.slug ? 'selected' : ''}`} aria-pressed={selection.styleSlug === item.slug} onClick={() => update('styleSlug', item.slug)}>
-                      <span className="dh-look-image"><img src={item.image} alt="" loading="lazy" /><span className="dh-tick" aria-hidden="true">{selection.styleSlug === item.slug && <Check size={15} />}</span></span>
-                      <strong>{item.name}</strong>
-                      <small>{item.description}</small>
-                    </button>
-                  ))}
-                </div>
-              </>
+              <div className="dh-looks">
+                {looks.map((item) => (
+                  <button type="button" key={item.slug} className={`dh-look ${selection.styleSlug === item.slug ? 'selected' : ''}`} aria-pressed={selection.styleSlug === item.slug} onClick={() => update('styleSlug', item.slug)}>
+                    <span className="dh-look-image"><img src={item.image} alt="" loading="lazy" /><span className="dh-tick" aria-hidden="true">{selection.styleSlug === item.slug && <Check size={15} />}</span></span>
+                    <strong>{item.name}</strong>
+                    <small>{item.description}</small>
+                  </button>
+                ))}
+              </div>
             )}
 
             {step === 2 && (
               <div className="dh-details">
-                <Group legend="Flowers & finish">
-                  {stylingOptions.map((option) => <Chip key={option.value} selected={selection.styling === option.value} onClick={() => update('styling', option.value)} title={option.title} detail={option.detail} />)}
-                </Group>
-                <Group legend="Floral coverage" hint="Sarah will confirm what suits your design.">
-                  {['Top half only', 'Fuller top', 'Full arch'].map((option) => <Chip key={option} selected={selection.coverage === option} onClick={() => update('coverage', option)} title={option} />)}
-                </Group>
-                <Group legend="Throne chairs">
-                  {([['none', 'No chairs'], ['single', 'One throne chair'], ['pair', 'A pair of thrones']] as [Seating, string][]).map(([value, label]) => <Chip key={value} selected={selection.seating === value} onClick={() => update('seating', value)} title={label} />)}
-                </Group>
-                {selection.seating && selection.seating !== 'none' && (
-                  <fieldset className="dh-group">
-                    <legend>Throne style <span>(optional)</span></legend>
-                    <div className="dh-thrones">
-                      {thrones.map((throne) => (
-                        <button type="button" key={throne.name} className={`dh-throne ${selection.throneStyle === throne.name ? 'selected' : ''}`} aria-pressed={selection.throneStyle === throne.name} onClick={() => update('throneStyle', selection.throneStyle === throne.name ? '' : throne.name)}>
-                          <span className="dh-throne-image"><img src={asset(throne.image)} alt="" loading="lazy" /><span className="dh-tick" aria-hidden="true">{selection.throneStyle === throne.name && <Check size={14} />}</span></span>
+                <fieldset className="dh-group">
+                  <legend>Flowers</legend>
+                  <div className="dh-cards dh-cards-3">
+                    {stylingOptions.map((option) => (
+                      <button type="button" key={option.value} className={`dh-card ${selection.styling === option.value ? 'selected' : ''}`} aria-pressed={selection.styling === option.value} onClick={() => update('styling', option.value)}>
+                        <strong>{option.title}</strong>
+                        <small>{option.detail}</small>
+                        <span className="dh-card-tick" aria-hidden="true">{selection.styling === option.value && <Check size={12} />}</span>
+                      </button>
+                    ))}
+                  </div>
+                </fieldset>
+
+                <fieldset className="dh-group">
+                  <legend>How far should the flowers reach?</legend>
+                  <div className="dh-cards dh-cards-3">
+                    {coverageOptions.map((option) => (
+                      <button type="button" key={option.value} className={`dh-card dh-coverage ${selection.coverage === option.value ? 'selected' : ''}`} aria-pressed={selection.coverage === option.value} onClick={() => update('coverage', option.value)}>
+                        <CoverageHeart amount={option.amount} />
+                        <strong>{option.value}</strong>
+                        <small>{option.detail}</small>
+                        <span className="dh-card-tick" aria-hidden="true">{selection.coverage === option.value && <Check size={12} />}</span>
+                      </button>
+                    ))}
+                  </div>
+                </fieldset>
+
+                <fieldset className="dh-group">
+                  <legend>Throne chairs</legend>
+                  <div className="dh-thrones">
+                    <button type="button" className={`dh-throne dh-throne-none ${selection.seating === 'none' ? 'selected' : ''}`} aria-pressed={selection.seating === 'none'} onClick={chooseNoChairs}>
+                      <span className="dh-throne-image"><Ban size={26} strokeWidth={1.3} aria-hidden="true" /><span className="dh-tick" aria-hidden="true">{selection.seating === 'none' && <Check size={13} />}</span></span>
+                      <strong>No chairs</strong>
+                    </button>
+                    {thrones.map((throne) => {
+                      const picked = Boolean(selection.seating) && selection.seating !== 'none' && selection.throneStyle === throne.name
+                      return (
+                        <button type="button" key={throne.name} className={`dh-throne ${picked ? 'selected' : ''}`} aria-pressed={picked} onClick={() => chooseThrone(throne.name)}>
+                          <span className="dh-throne-image"><img src={asset(throne.image)} alt="" loading="lazy" /><span className="dh-tick" aria-hidden="true">{picked && <Check size={13} />}</span></span>
                           <strong>{throne.name}</strong>
                         </button>
+                      )
+                    })}
+                  </div>
+                  {selection.seating && selection.seating !== 'none' && (
+                    <div className="dh-toggle" role="group" aria-label="How many throne chairs">
+                      {([['single', 'One chair · £150'], ['pair', 'A pair · £300']] as [Seating, string][]).map(([value, label]) => (
+                        <button type="button" key={value} className={selection.seating === value ? 'active' : ''} aria-pressed={selection.seating === value} onClick={() => update('seating', value)}>{label}</button>
+                      ))}
+                    </div>
+                  )}
+                </fieldset>
+
+                <div className="dh-group-pair">
+                  <fieldset className="dh-group">
+                    <legend>Where will it frame your day?</legend>
+                    <div className="dh-chips">
+                      {momentOptions.map((option) => (
+                        <button type="button" key={option} className={`dh-chip ${selection.moment === option ? 'selected' : ''}`} aria-pressed={selection.moment === option} onClick={() => update('moment', option)}>{option}</button>
                       ))}
                     </div>
                   </fieldset>
-                )}
-                <Group legend="Where will it frame your day?">
-                  {momentOptions.map((option) => <Chip key={option} selected={selection.moment === option} onClick={() => update('moment', option)} title={option} />)}
-                </Group>
-                <Group legend="Coordinating styling" hint="Candles, florals and details that tie the setting together.">
-                  {([['no', 'Not for now'], ['yes', 'Yes, include my ideas']] as [YesNo, string][]).map(([value, label]) => <Chip key={value} selected={selection.coordinating === value} onClick={() => update('coordinating', value)} title={label} />)}
-                </Group>
+                  <fieldset className="dh-group">
+                    <legend>Finishing touches?</legend>
+                    <div className="dh-chips">
+                      {([['no', 'Not for now'], ['yes', 'Yes, candles & details']] as [YesNo, string][]).map(([value, label]) => (
+                        <button type="button" key={value} className={`dh-chip ${selection.coordinating === value ? 'selected' : ''}`} aria-pressed={selection.coordinating === value} onClick={() => update('coordinating', value)}>{label}</button>
+                      ))}
+                    </div>
+                  </fieldset>
+                </div>
               </div>
             )}
 
@@ -278,15 +339,6 @@ export default function DesignYourHeart() {
                   <strong>{recommendation.price}</strong>
                   <p>{recommendation.description}</p>
                 </div>
-                <dl className="dh-summary">
-                  <div><dt>Atmosphere</dt><dd>{selection.atmosphere === 'dark' ? 'Dark Romance' : 'Romantic'}</dd></div>
-                  <div><dt>Arch</dt><dd>{selectedLook.name}</dd></div>
-                  <div><dt>Flowers &amp; finish</dt><dd>{stylingOptions.find((item) => item.value === selection.styling)?.title}</dd></div>
-                  <div><dt>Coverage</dt><dd>{selection.coverage}</dd></div>
-                  <div><dt>Throne chairs</dt><dd>{seatingLabel}{chosenThrone ? ` · ${chosenThrone.name}` : ''}</dd></div>
-                  <div><dt>Your moment</dt><dd>{selection.moment}</dd></div>
-                  <div><dt>Coordinating styling</dt><dd>{selection.coordinating === 'yes' ? 'Include my ideas' : 'Not for now'}</dd></div>
-                </dl>
                 <p className="dh-note">Guide prices only. Nothing is booked yet: Sarah will personally confirm your design, availability and final quotation, which depends on your date, venue, travel and flowers.</p>
                 <div className="dh-result-actions">
                   <Link to={enquiryPath} className="button button-primary">Send my design to Sarah <ArrowRight size={17} /></Link>
@@ -304,22 +356,30 @@ export default function DesignYourHeart() {
           </div>
 
           <aside className="dh-board" aria-label="Your moodboard">
-            <p className="eyebrow">Your moodboard</p>
-            <div className={`dh-board-images ${chosenThrone ? 'with-throne' : ''}`}>
-              <div className="dh-board-main" key={previewImage}><img src={previewImage} alt={selectedLook ? `${selectedLook.name} preview` : 'Hearts in Bloom inspiration'} /></div>
-              {chosenThrone && <div className="dh-board-throne" key={chosenThrone.name}><img src={asset(chosenThrone.image)} alt={`${chosenThrone.name} throne chairs`} /><span>{chosenThrone.name}</span></div>}
+            <div className="dh-board-head">
+              <p className="eyebrow">Your moodboard</p>
+              <h3>{selectedLook?.name ?? atmosphereCard?.name ?? 'Begin with a feeling'}</h3>
             </div>
-            <h3>{selectedLook?.name ?? (selection.atmosphere === 'dark' ? 'Dark Romance' : selection.atmosphere === 'romantic' ? 'Romantic' : 'Begin with a feeling')}</h3>
-            <p>{selectedLook?.description ?? 'Your choices will gather here as you go.'}</p>
-            <div className="dh-palette" aria-label="Colour palette">
-              {palette.map((colour) => <span key={colour.name}><i style={{ backgroundColor: colour.value }} aria-hidden="true" />{colour.name}</span>)}
+            <div className="dh-collage">
+              <div className="dh-tile dh-tile-main" key={previewImage || 'empty'}>
+                {previewImage ? <img src={previewImage} alt={selectedLook ? `${selectedLook.name} heart arch` : ''} /> : <span className="dh-tile-empty"><Heart size={26} strokeWidth={1.3} aria-hidden="true" />Your arch</span>}
+              </div>
+              <div className="dh-tile dh-tile-throne" key={chosenThrone?.name ?? 'none'}>
+                {chosenThrone
+                  ? <><img src={asset(chosenThrone.image)} alt={`${chosenThrone.name} throne chairs`} /><span className="dh-tile-label">{chosenThrone.name}</span></>
+                  : <span className="dh-tile-empty">{selection.seating === 'none' ? <><Ban size={22} strokeWidth={1.3} aria-hidden="true" />No thrones</> : <><Crown size={22} strokeWidth={1.3} aria-hidden="true" />Thrones</>}</span>}
+              </div>
+              <div className="dh-tile dh-tile-palette">
+                {selectedLook
+                  ? <div className="dh-swatches">{palette.map((colour) => <span key={colour.name}><i style={{ backgroundColor: colour.value }} aria-hidden="true" /><small>{colour.name}</small></span>)}</div>
+                  : <span className="dh-tile-empty"><span className="dh-swatch-dots" aria-hidden="true"><i /><i /><i /></span>Palette</span>}
+              </div>
             </div>
-            <ul className="dh-tags">
-              <li className={selection.styling ? '' : 'empty'}>{stylingOptions.find((item) => item.value === selection.styling)?.title ?? 'Flowers'}</li>
-              <li className={selection.coverage ? '' : 'empty'}>{selection.coverage || 'Coverage'}</li>
-              <li className={selection.seating ? '' : 'empty'}>{seatingLabel || 'Throne chairs'}{chosenThrone ? ` · ${chosenThrone.name}` : ''}</li>
-              <li className={selection.moment ? '' : 'empty'}>{selection.moment || 'Your moment'}</li>
-            </ul>
+            <dl className="dh-board-list">
+              {boardRows.map(([label, value]) => (
+                <div key={label} className={value ? '' : 'empty'}><dt>{label}</dt><dd>{value || '—'}</dd></div>
+              ))}
+            </dl>
             {recommendation && <div className="dh-board-price"><small>Suggested starting point</small><strong>{recommendation.name} · {recommendation.price}</strong></div>}
           </aside>
         </div>
