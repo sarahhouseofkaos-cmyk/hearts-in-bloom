@@ -59,7 +59,7 @@ function buildArrangement() {
   const fillers: Filler[] = []
   for (const half of HALVES) {
     const { total } = pointAt(half, 0)
-    const steps = Math.round(total / 13)
+    const steps = Math.round(total / 10)
     for (let step = 0; step <= steps; step += 1) {
       const t = step / steps
       const { x, y, angle } = pointAt(half, t)
@@ -70,11 +70,11 @@ function buildArrangement() {
         const offset = spread() * width * 1.75
         leaves.push({ x: x + Math.cos(normal) * offset, y: y + Math.sin(normal) * offset, length: (top ? 34 : 26) + next() * 24, rotate: (angle * 180) / Math.PI + spread() * 80 + (index % 2 ? 180 : 0), tone: next(), t, variant: Math.floor(next() * 4) })
       }
-      const count = top ? (next() < 0.55 ? 2 : 1) : next() < 0.55 ? 1 : 0
+      const count = top ? (next() < 0.7 ? 2 : 1) : next() < 0.62 ? 1 : 0
       for (let index = 0; index < count; index += 1) {
         const offset = spread() * width
         const size = top ? 15 + next() * 20 : Math.max(9, 17 - t * 6 + next() * 9)
-        const kind = top && next() < 0.3 ? 'hydrangea' : 'rose'
+        const kind = top && next() < 0.24 ? 'hydrangea' : 'rose'
         flowers.push({ x: x + Math.cos(normal) * offset, y: y + Math.sin(normal) * offset, r: kind === 'hydrangea' ? size * 1.2 : size, rotate: next() * 360, roll: next(), t, kind, variant: Math.floor(next() * 4) })
       }
       if (next() < 0.5) {
@@ -89,10 +89,10 @@ function buildArrangement() {
 
 const arrangement = buildArrangement()
 
-/* Real flowers and sprigs cut from Hearts in Bloom photographs, kept in greyscale so they can be tinted any colour. */
+/* Roses, hydrangeas and foliage rendered in greyscale (see scripts/flowers/) so they can be tinted any colour. */
 const texture = (name: string) => asset(`/images/flowers/${name}.webp`)
 const ROSES = [1, 2, 3, 4].map((n) => texture(`rose-${n}`))
-const HYDRANGEAS = [1, 2, 3, 4].map((n) => texture(`hydrangea-${n}`))
+const HYDRANGEAS = [1, 2, 1, 2].map((n) => texture(`hydrangea-${n}`))
 const SPRIGS = [1, 2, 3, 4].map((n) => texture(`sprig-${n}`))
 
 /** A colour filter that tints a greyscale photo to the given colour, keeping its real shading. */
@@ -118,8 +118,6 @@ export default function ColourArch({ colours, foliage, coverage, className = '',
   const palette = colours.length ? colours.map((colour) => colour.value) : ['#efe6cf']
   const leafColour = isHexColour(foliage) ? foliage : '#4f6b3f'
   const id = `colour-arch-${useId().replace(/[^a-zA-Z0-9]/g, '')}`
-  const groups = palette.map(() => [] as Flower[])
-  for (const flower of arrangement.flowers) groups[pickWeighted(weights, flower.roll) % palette.length].push(flower)
 
   return (
     <div className={`colour-arch ${className}`} role="img" aria-label={label ?? 'Preview of the heart arch dressed in your chosen colours'}>
@@ -130,8 +128,9 @@ export default function ColourArch({ colours, foliage, coverage, className = '',
           {palette.map((value, index) => (
             <filter key={index} id={`${id}-c${index}`} colorInterpolationFilters="sRGB"><feColorMatrix type="matrix" values={tintMatrix(isHexColour(value) ? value : '#efe6cf')} /></filter>
           ))}
-          <filter id={`${id}-shadow`} x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="2" dy="4" stdDeviation="4" floodColor="#000" floodOpacity="0.28" /></filter>
+          <filter id={`${id}-shadow`} x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="1" dy="5" stdDeviation="6" floodColor="#1d140f" floodOpacity="0.38" /></filter>
         </defs>
+        <g filter={`url(#${id}-shadow)`}>
         <g filter={`url(#${id}-leaf)`}>
           {arrangement.leaves.map((leaf, index) => {
             const scale = taper(leaf.t, reach + 0.03)
@@ -140,18 +139,16 @@ export default function ColourArch({ colours, foliage, coverage, className = '',
             return <image key={index} href={SPRIGS[leaf.variant]} x={-size / 2} y={-size / 2} width={size} height={size} transform={`translate(${leaf.x} ${leaf.y}) rotate(${leaf.rotate})`} preserveAspectRatio="xMidYMid meet" />
           })}
         </g>
+        </g>
         <g filter={`url(#${id}-shadow)`}>
-          {groups.map((flowers, colourIndex) => (
-            <g key={colourIndex} filter={`url(#${id}-c${colourIndex})`}>
-              {flowers.map((flower, index) => {
-                const scale = taper(flower.t, reach)
-                if (!scale) return null
-                const size = flower.r * 2.35 * scale
-                const href = flower.kind === 'hydrangea' ? HYDRANGEAS[flower.variant] : ROSES[flower.variant]
-                return <image key={index} href={href} x={-size / 2} y={-size / 2} width={size} height={size} transform={`translate(${flower.x} ${flower.y}) rotate(${flower.rotate})`} />
-              })}
-            </g>
-          ))}
+          {arrangement.flowers.map((flower, index) => {
+            const scale = taper(flower.t, reach)
+            if (!scale) return null
+            const size = flower.r * (flower.kind === 'hydrangea' ? 2.3 : 2.7) * scale
+            const href = flower.kind === 'hydrangea' ? HYDRANGEAS[flower.variant] : ROSES[flower.variant]
+            const colourIndex = pickWeighted(weights, flower.roll) % palette.length
+            return <image key={index} href={href} filter={`url(#${id}-c${colourIndex})`} x={-size / 2} y={-size / 2} width={size} height={size} transform={`translate(${flower.x} ${flower.y}) rotate(${flower.rotate})`} />
+          })}
         </g>
       </svg>
     </div>
