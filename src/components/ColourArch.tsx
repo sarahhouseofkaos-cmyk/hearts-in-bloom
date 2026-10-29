@@ -15,7 +15,7 @@ const HALVES: [number, number][][] = [
 ]
 
 /** How far down each half the flowers reach for each coverage choice. */
-export const coverageReach: Record<string, number> = {
+const coverageReach: Record<string, number> = {
   'Top half only': 0.48,
   'Fuller top': 0.67,
   'Full arch': 1,
