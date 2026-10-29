@@ -297,7 +297,7 @@ export default function DesignYourHeart() {
                 ))}
                 <button type="button" className={`dh-look dh-look-own ${isCustom ? 'selected' : ''}`} aria-pressed={isCustom} onClick={chooseOwnColours}>
                   <span className="dh-look-image">
-                    <ColourArch colours={selection.customColours.length ? selection.customColours : coloursByName(defaultCustomColours[selection.atmosphere === 'dark' ? 'dark' : 'romantic'])} foliage={(foliageColour ?? foliageOptions[1]).value} coverage="Full arch" label="Your own colours preview" />
+                    <ColourArch colours={selection.customColours.length ? selection.customColours : coloursByName(defaultCustomColours[selection.atmosphere === 'dark' ? 'dark' : 'romantic'])} foliage={(foliageColour ?? foliageOptions[1]).name} coverage="Full arch" label="Your own colours preview" />
                     <span className="dh-look-badge">New</span>
                     <span className="dh-tick" aria-hidden="true">{isCustom && <Check size={15} />}</span>
                   </span>
@@ -309,7 +309,7 @@ export default function DesignYourHeart() {
 
             {step === 1 && isCustom && (
               <div className="dh-own">
-                <ColourArch className="dh-own-preview" colours={selection.customColours} foliage={foliageColour?.value ?? ''} coverage={previewCoverage} />
+                <ColourArch className="dh-own-preview" colours={selection.customColours} foliage={foliageColour?.name ?? ''} coverage={previewCoverage} />
                 <div className="dh-own-controls">
                   <fieldset className="dh-group">
                     <legend>Flower colours <span>(up to {MAX_FLOWER_COLOURS}, main colour first)</span></legend>
@@ -460,7 +460,7 @@ export default function DesignYourHeart() {
             </div>
             <div className="dh-collage">
               <div className="dh-tile dh-tile-main" key={isCustom ? 'own' : previewImage || 'empty'}>
-                {isCustom ? <ColourArch colours={selection.customColours} foliage={foliageColour?.value ?? ''} coverage={previewCoverage} /> : previewImage ? <img src={previewImage} alt={selectedLook ? `${selectedLook.name} heart arch` : ''} /> : <span className="dh-tile-empty"><Heart size={26} strokeWidth={1.3} aria-hidden="true" />Your arch</span>}
+                {isCustom ? <ColourArch colours={selection.customColours} foliage={foliageColour?.name ?? ''} coverage={previewCoverage} /> : previewImage ? <img src={previewImage} alt={selectedLook ? `${selectedLook.name} heart arch` : ''} /> : <span className="dh-tile-empty"><Heart size={26} strokeWidth={1.3} aria-hidden="true" />Your arch</span>}
               </div>
               <div className="dh-tile dh-tile-throne" key={chosenThrone?.name ?? 'none'}>
                 {chosenThrone
