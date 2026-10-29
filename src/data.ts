@@ -167,7 +167,7 @@ export const email = 'hello@heartsinbloom.co.uk'
 
 /** Throne chair styles available to hire. Image paths are public-folder paths (wrap with asset()). */
 export const thrones = [
-  { name: 'Gold', copy: 'Classic carved gold, warm and regal.', image: '/images/throne-chairs.webp', alt: 'A couple seated on gold throne chairs from Hearts in Bloom' },
+  { name: 'Gold', copy: 'Carved gold with black velvet, warm and regal.', image: '/images/throne-gold-garden.webp', alt: 'A pair of carved gold throne chairs with black velvet and lion-carved arms on a garden lawn' },
   { name: 'Gothic black', copy: 'Ornate black thrones for Dark Romance settings.', image: '/images/throne-black-garden.webp', alt: 'A pair of ornate gothic black throne chairs with lion-carved arms on a garden lawn' },
   { name: 'White', copy: 'Carved ivory-white thrones, light and elegant.', image: '/images/throne-white-garden.webp', alt: 'A pair of carved white throne chairs with lion-carved arms in front of a country house' },
   { name: 'The crown pair', copy: 'Our one-of-a-kind gilded pair with crown tops.', image: '/images/throne-crown-garden.webp', alt: 'A unique pair of gilded crown-topped throne chairs with damask upholstery in a garden' },
