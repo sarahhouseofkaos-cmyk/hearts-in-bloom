@@ -40,7 +40,7 @@ The following images were supplied directly by Hearts in Bloom for this redesign
 | `arch-bare.webp` | supplied October 2026 (bare heart arch, used for Your own colours) |
 | `throne-gold-garden.webp` | supplied October 2026 |
 | `throne-black-garden.webp` | supplied October 2026 |
-| `flowers/rose-1…4.webp`, `flowers/hydrangea-1…4.webp`, `flowers/sprig-1…4.webp` | cut from Sarah's own arch and sweetheart-table photos, greyscale for tinting |
+| `flowers/rose-1…4.webp`, `flowers/hydrangea-1…2.webp`, `flowers/sprig-1…4.webp` | rendered for this site in greyscale for tinting (scripts/flowers/) |
 | `throne-white-garden.webp` | supplied October 2026 |
 | `throne-crown-garden.webp` | supplied October 2026 |
 
