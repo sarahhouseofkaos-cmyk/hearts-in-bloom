@@ -1,3 +1,5 @@
+import type { NamedColour } from './colours'
+
 export type Atmosphere = 'romantic' | 'dark'
 export type StylingLevel = 'signature' | 'higher' | 'fresh'
 export type Seating = 'none' | 'single' | 'pair'
@@ -11,6 +13,10 @@ export type DesignSelection = {
   seating: Seating | ''
   /** Optional throne chair style, e.g. "Gothic black". */
   throneStyle: string
+  /** The couple's own flower colours, when they choose "Your own colours". */
+  customColours: NamedColour[]
+  /** Foliage colour name for their own colours. */
+  foliage: string
   coordinating: YesNo | ''
   moment: string
 }
@@ -30,6 +36,8 @@ export const emptyDesign: DesignSelection = {
   coverage: '',
   seating: '',
   throneStyle: '',
+  customColours: [],
+  foliage: '',
   coordinating: '',
   moment: '',
 }
