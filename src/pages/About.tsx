@@ -7,24 +7,50 @@ export default function About() {
   return (
     <>
       <PageMeta title="About Sarah" description="Meet Sarah, the personal wedding stylist behind Hearts in Bloom in Newcastle upon Tyne. Romantic details, thoughtful service and hand-styled heart arches." />
-      <section className="about-hero">
-        <div className="about-hero-copy">
-          <p className="eyebrow">The person behind the petals</p>
-          <h1>Hello,<br /><em>I’m Sarah.</em></h1>
-          <p>The stylist behind Hearts in Bloom — a small wedding-styling business built on romantic details, thoughtful choices and genuinely personal care.</p>
-        </div>
-        <div className="about-hero-images">
-          <img className="about-image-main" src={asset('/images/styling-detail.webp')} alt="Carefully arranged wedding florals" />
-          <img className="about-image-small" src={asset('/images/throne-chairs.webp')} alt="Hearts in Bloom statement seating" />
-        </div>
-      </section>
+      <section className="ed-spread">
+        <div className="ed-text">
+          <p className="ed-label"><span>Meet the stylist</span></p>
+          <div className="ed-title-row">
+            <h1 className="ed-title" aria-label="Sarah and Hearts in Bloom">
+              <span>Sarah</span>
+              <span className="ed-amp" aria-hidden="true">&amp;</span>
+              <span className="ed-indent">Hearts</span>
+              <span className="ed-indent">in Bloom</span>
+            </h1>
+            <p className="ed-standfirst">A small Newcastle studio of hand-styled heart arches and statement thrones, built on romantic detail and genuinely personal care.</p>
+          </div>
 
-      <section className="story-section section-pad" data-reveal>
-        <div><p className="eyebrow">My story</p><h2>A love of the<br /><em>beautifully personal.</em></h2></div>
-        <div className="story-copy">
-          <p>Hearts in Bloom began with a simple love of soft, romantic details and the beauty of a well-styled moment. Based in Newcastle upon Tyne, I create signature heart arches and luxury hire pieces designed to frame the most meaningful parts of your day.</p>
-          <p>Every arch is styled by hand, whether you prefer classic ivory, soft blush, lush greenery or something deeper and more atmospheric. My approach is personal and considered: I take time to understand your vision, your venue and the feeling you want to create.</p>
-          <p>From our first conversation to the moment I finish setting up, everything is handled with calm and care. The finished look should feel like a natural part of your celebration — never something simply added on top.</p>
+          <div className="ed-story">
+            <figure className="ed-story-photo">
+              <img src={asset('/images/about-crown-thrones-couple.webp')} alt="A bride and groom holding hands on the Hearts in Bloom crown throne chairs at their reception" />
+            </figure>
+            <div className="ed-story-copy">
+              <p className="ed-kicker">My story</p>
+              <p className="ed-dropcap">Hearts in Bloom began with a simple love of soft, romantic details and the beauty of a well-styled moment. Based in Newcastle upon Tyne, I create signature heart arches and luxury hire pieces designed to frame the most meaningful parts of your day.</p>
+              <p>Every arch is styled by hand, whether you prefer classic ivory, soft blush, lush greenery or something deeper and more atmospheric. My approach is personal and considered: I take time to understand your vision, your venue and the feeling you want to create.</p>
+              <p>From our first conversation to the moment I finish setting up, everything is handled with calm and care, and every enquiry comes directly to me.</p>
+            </div>
+          </div>
+
+          <aside className="ed-pull">
+            <p className="ed-pull-label"><span>My promise</span></p>
+            <blockquote>“The finished look should feel like a natural part of your celebration, never something simply added on top.”</blockquote>
+          </aside>
+
+          <p className="ed-credits">
+            <span><b>Heart arches</b> Hearts in Bloom</span>
+            <span><b>Throne chairs</b> Gold, gothic black, white &amp; the crown pair</span>
+            <span><b>Styling</b> Sarah, by hand</span>
+            <span><b>Based</b> Newcastle upon Tyne</span>
+          </p>
+        </div>
+
+        <div className="ed-collage" aria-label="Hearts in Bloom weddings">
+          <figure className="ed-c1"><img src={asset('/images/about-rose-detail.webp')} alt="Red and blush roses with pink hydrangea on a heart arch" /></figure>
+          <figure className="ed-c2"><img src={asset('/images/about-white-rose-arch.webp')} alt="White rose heart arch in a formal rose garden" /></figure>
+          <figure className="ed-c3"><img src={asset('/images/about-gold-throne-laugh.webp')} alt="A laughing bride on a gold lion throne chair beside her groom" /></figure>
+          <figure className="ed-c4"><img src={asset('/images/about-garden-arch-couple.webp')} alt="A couple beneath a full blush and ivory floral heart arch in front of a country house" /></figure>
+          <figure className="ed-c5"><img src={asset('/images/throne-black-garden.webp')} alt="A pair of ornate gothic black throne chairs on a garden lawn" /></figure>
         </div>
       </section>
 
